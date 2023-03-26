@@ -93,4 +93,4 @@ export default {
     smsCode: 'SMS code',
     mobile: 'Mobile',
   },
-}
+};

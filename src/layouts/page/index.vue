@@ -26,34 +26,34 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, unref } from 'vue'
+  import { computed, defineComponent, unref } from 'vue';
 
-  import { useRootSetting } from '/@/hooks/setting/useRootSetting'
+  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 
-  import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting'
-  import { useMultipleTabSetting } from '/@/hooks/setting/useMultipleTabSetting'
-  import { getTransitionName } from './transition'
+  import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting';
+  import { useMultipleTabSetting } from '/@/hooks/setting/useMultipleTabSetting';
+  import { getTransitionName } from './transition';
 
-  import { useMultipleTabStore } from '/@/store/modules/multipleTab'
+  import { useMultipleTabStore } from '/@/store/modules/multipleTab';
 
   export default defineComponent({
     name: 'PageLayout',
     setup() {
-      const { getShowMultipleTab } = useMultipleTabSetting()
-      const tabStore = useMultipleTabStore()
+      const { getShowMultipleTab } = useMultipleTabSetting();
+      const tabStore = useMultipleTabStore();
 
-      const { getOpenKeepAlive } = useRootSetting()
+      const { getOpenKeepAlive } = useRootSetting();
 
-      const { getBasicTransition, getEnableTransition } = useTransitionSetting()
+      const { getBasicTransition, getEnableTransition } = useTransitionSetting();
 
-      const openCache = computed(() => unref(getOpenKeepAlive) && unref(getShowMultipleTab))
+      const openCache = computed(() => unref(getOpenKeepAlive) && unref(getShowMultipleTab));
 
       const getCaches = computed((): string[] => {
         if (!unref(getOpenKeepAlive)) {
-          return []
+          return [];
         }
-        return tabStore.getCachedTabList
-      })
+        return tabStore.getCachedTabList;
+      });
 
       return {
         getTransitionName,
@@ -61,7 +61,7 @@
         getEnableTransition,
         getBasicTransition,
         getCaches,
-      }
+      };
     },
-  })
+  });
 </script>

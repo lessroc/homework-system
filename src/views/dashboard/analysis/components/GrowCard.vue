@@ -10,5 +10,5 @@
     loading: {
       type: Boolean,
     },
-  })
+  });
 </script>

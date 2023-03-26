@@ -1,6 +1,6 @@
-import { defineComponent, computed, unref } from 'vue'
-import { BasicDrawer } from '/@/components/Drawer/index'
-import { Divider } from 'ant-design-vue'
+import { defineComponent, computed, unref } from 'vue';
+import { BasicDrawer } from '/@/components/Drawer/index';
+import { Divider } from 'ant-design-vue';
 import {
   TypePicker,
   ThemeColorPicker,
@@ -8,20 +8,20 @@ import {
   SwitchItem,
   SelectItem,
   InputNumberItem,
-} from './components'
+} from './components';
 
-import { AppDarkModeToggle } from '/@/components/Application'
+import { AppDarkModeToggle } from '/@/components/Application';
 
-import { MenuTypeEnum, TriggerEnum } from '/@/enums/menuEnum'
+import { MenuTypeEnum, TriggerEnum } from '/@/enums/menuEnum';
 
-import { useRootSetting } from '/@/hooks/setting/useRootSetting'
-import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
-import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
-import { useMultipleTabSetting } from '/@/hooks/setting/useMultipleTabSetting'
-import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting'
-import { useI18n } from '/@/hooks/web/useI18n'
+import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
+import { useMultipleTabSetting } from '/@/hooks/setting/useMultipleTabSetting';
+import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting';
+import { useI18n } from '/@/hooks/web/useI18n';
 
-import { baseHandler } from './handler'
+import { baseHandler } from './handler';
 
 import {
   HandlerEnum,
@@ -31,15 +31,15 @@ import {
   routerTransitionOptions,
   menuTypeList,
   mixSidebarTriggerOptions,
-} from './enum'
+} from './enum';
 
 import {
   HEADER_PRESET_BG_COLOR_LIST,
   SIDE_BAR_BG_COLOR_LIST,
   APP_PRESET_COLOR_LIST,
-} from '/@/settings/designSetting'
+} from '/@/settings/designSetting';
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 export default defineComponent({
   name: 'SettingDrawer',
@@ -55,10 +55,10 @@ export default defineComponent({
       getGrayMode,
       getShowDarkModeToggle,
       getThemeColor,
-    } = useRootSetting()
+    } = useRootSetting();
 
     const { getOpenPageLoading, getBasicTransition, getEnableTransition, getOpenNProgress } =
-      useTransitionSetting()
+      useTransitionSetting();
 
     const {
       getIsHorizontal,
@@ -79,20 +79,20 @@ export default defineComponent({
       getCloseMixSidebarOnChange,
       getMixSideTrigger,
       getMixSideFixed,
-    } = useMenuSetting()
+    } = useMenuSetting();
 
     const {
       getShowHeader,
       getFixed: getHeaderFixed,
       getHeaderBgColor,
       getShowSearch,
-    } = useHeaderSetting()
+    } = useHeaderSetting();
 
-    const { getShowMultipleTab, getShowQuick, getShowRedo, getShowFold } = useMultipleTabSetting()
+    const { getShowMultipleTab, getShowQuick, getShowRedo, getShowFold } = useMultipleTabSetting();
 
     const getShowMenuRef = computed(() => {
-      return unref(getShowMenu) && !unref(getIsHorizontal)
-    })
+      return unref(getShowMenu) && !unref(getIsHorizontal);
+    });
 
     function renderSidebar() {
       return (
@@ -104,12 +104,12 @@ export default defineComponent({
                 mode: item.mode,
                 type: item.type,
                 split: unref(getIsHorizontal) ? false : undefined,
-              })
+              });
             }}
             def={unref(getMenuType)}
           />
         </>
-      )
+      );
     }
 
     function renderHeaderTheme() {
@@ -119,7 +119,7 @@ export default defineComponent({
           def={unref(getHeaderBgColor)}
           event={HandlerEnum.HEADER_THEME}
         />
-      )
+      );
     }
 
     function renderSiderTheme() {
@@ -129,7 +129,7 @@ export default defineComponent({
           def={unref(getMenuBgColor)}
           event={HandlerEnum.MENU_THEME}
         />
-      )
+      );
     }
 
     function renderMainTheme() {
@@ -139,19 +139,19 @@ export default defineComponent({
           def={unref(getThemeColor)}
           event={HandlerEnum.CHANGE_THEME_COLOR}
         />
-      )
+      );
     }
 
     /**
      * @description:
      */
     function renderFeatures() {
-      let triggerDef = unref(getTrigger)
+      let triggerDef = unref(getTrigger);
 
-      const triggerOptions = getMenuTriggerOptions(unref(getSplit))
-      const some = triggerOptions.some((item) => item.value === triggerDef)
+      const triggerOptions = getMenuTriggerOptions(unref(getSplit));
+      const some = triggerOptions.some((item) => item.value === triggerDef);
       if (!some) {
-        triggerDef = TriggerEnum.FOOTER
+        triggerDef = TriggerEnum.FOOTER;
       }
 
       return (
@@ -263,7 +263,7 @@ export default defineComponent({
             formatter={(value: string) => `${parseInt(value)}px`}
           />
         </>
-      )
+      );
     }
 
     function renderContent() {
@@ -350,7 +350,7 @@ export default defineComponent({
             def={unref(getColorWeak)}
           />
         </>
-      )
+      );
     }
 
     function renderTransition() {
@@ -381,7 +381,7 @@ export default defineComponent({
             disabled={!unref(getEnableTransition)}
           />
         </>
-      )
+      );
     }
 
     return () => (
@@ -410,6 +410,6 @@ export default defineComponent({
         <Divider />
         <SettingFooter />
       </BasicDrawer>
-    )
+    );
   },
-})
+});

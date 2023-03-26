@@ -103,4 +103,4 @@ export default {
 
     mixSidebarFixed: 'Fixed expanded menu',
   },
-}
+};

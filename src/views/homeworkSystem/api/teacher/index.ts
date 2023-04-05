@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { homeworkHttp } from '/@/utils/http/axios';
 import { ErrorMessageMode } from '/#/axios';
 import {
   CreateCourseParams,
@@ -10,7 +10,7 @@ enum Api {
 }
 
 export function createCourseApi(params: CreateCourseParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post<CreateCourseResultParams>(
+  return homeworkHttp.post<CreateCourseResultParams>(
     {
       url: Api.createCourse,
       params,

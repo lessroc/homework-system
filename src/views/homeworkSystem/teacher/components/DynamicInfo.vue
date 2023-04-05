@@ -11,7 +11,7 @@
               {{ item.date }}
             </template>
             &lt;!&ndash; eslint-disable-next-line &ndash;&gt;
-            <template #title> {{ item.name }} <span v-html="item.desc"> </span> </template>
+            <template #title> {{ item.courseName }} <span v-html="item.courseDesc"> </span> </template>
             <template #avatar>
               <Icon :icon="item.avatar" :size="30" />
             </template>
@@ -54,11 +54,11 @@
     </List>
     <Modal v-model:visible="showCCMB" title="新建课程" centered @cancel="resetForm" @ok="onSubmit">
       <Form ref="formRef" :model="formState" :rules="rules" class="CCMBForm">
-        <FormItem label="课程名称：" name="name">
-          <Input v-model:value="formState.name" />
+        <FormItem label="课程名称：" name="courseName">
+          <Input v-model:value="formState.courseName" />
         </FormItem>
-        <FormItem label="课程描述：" name="desc">
-          <Textarea v-model:value="formState.desc" />
+        <FormItem label="课程描述：" name="courseDesc">
+          <Textarea v-model:value="formState.courseDesc" />
         </FormItem>
       </Form>
     </Modal>
@@ -109,16 +109,17 @@
 
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { reactive, toRaw, UnwrapRef } from 'vue';
+  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
 
   // 表单
   interface FormState {
-    name: string;
-    desc: string;
+    courseName: string;
+    courseDesc: string;
   }
   const formRef = ref();
   const formState: UnwrapRef<FormState> = reactive({
-    name: '',
-    desc: '',
+    courseName: '',
+    courseDesc: '',
   });
   const rules = {
     name: [
@@ -132,7 +133,14 @@
       .validate()
       .then(() => {
         console.log('values', formState, toRaw(formState));
-        showCCMB.value = false;
+        createCourseMethod(formState)
+          .then((res) => {
+            console.log('res', res);
+            showCCMB.value = false;
+          })
+          .catch((err) => {
+            console.log('err', err);
+          });
       })
       .catch((error: ValidateErrorEntity<FormState>) => {
         console.log('error', error);

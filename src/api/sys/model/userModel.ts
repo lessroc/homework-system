@@ -2,7 +2,7 @@
  * @description: Login interface parameters
  */
 export interface LoginParams {
-  username: string;
+  userName: string;
   password: string;
 }
 
@@ -17,6 +17,8 @@ export interface RoleInfo {
 export interface LoginResultModel {
   userId: string | number;
   token: string;
+  userName: string;
+  userType: string | number;
   role: RoleInfo;
 }
 

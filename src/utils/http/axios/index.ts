@@ -270,7 +270,9 @@ export const homeworkHttp = createAxios({
     // 接口拼接地址
     // urlPrefix: urlPrefix,
     // 需要对返回数据进行处理
-    isTransformResponse: false,
+    isTransformResponse: true,
+    //  是否加入时间戳
+    joinTime: false,
   },
 });
 

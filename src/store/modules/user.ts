@@ -7,7 +7,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
+import { doLogout, getUserInfo } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -16,6 +16,8 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
+import { loginHomeworkApi } from '/@/views/homeworkSystem/api/sys/user';
+import { handleGetUserInfoData } from '/@/views/homeworkSystem/utils/sys';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
@@ -90,8 +92,13 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        const data = await loginHomeworkApi(loginParams, mode);
+        const { token, userId, userName, userType } = data;
+        console.log('登录成功返回的数据:', data, userId);
+        let userInfo = { userId, userName, userType };
+        userInfo = handleGetUserInfoData(userInfo);
+        console.log('处理后的用户信息:', userInfo);
+        this.setUserInfo(userInfo);
 
         // save token
         this.setToken(token);

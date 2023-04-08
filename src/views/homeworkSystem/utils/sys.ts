@@ -25,14 +25,14 @@
  * ```
  */
 export const handleGetUserInfoData = (data: any) => {
-  // console.log(123, userStore);
-  const { userId, userName, userType } = data;
+  const { token, userId, userName, userType } = data;
   return {
+    token,
     userId,
     username: userName,
     realName: userName,
     avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
-    desc: setLoginRole(userType)[0].roleName,
+    desc: setLoginRole(userType)[0].value,
     password: '123456',
     homePath: '/dashboard/analysis',
     roles: setLoginRole(userType),
@@ -54,9 +54,9 @@ export const setLoginRole = (userType: number) => {
       roleName: role[userType][0].replace(role[userType][0][0], role[userType][0][0].toUpperCase()),
       value: role[userType][0],
     },
-    {
+    /* {
       roleName: 'Super Admin',
       value: 'super',
-    },
+    }, */
   ];
 };

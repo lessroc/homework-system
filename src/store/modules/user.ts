@@ -7,7 +7,6 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -95,7 +94,7 @@ export const useUserStore = defineStore({
         const data = await loginHomeworkApi(loginParams, mode);
         const { token, userId, userName, userType } = data;
         // console.log('登录成功返回的数据:', data, userId);
-        let userInfo: any = { userId, userName, userType };
+        let userInfo: any = { token, userId, userName, userType };
         userInfo = handleGetUserInfoData(userInfo);
         // console.log('处理后的用户信息:', userInfo);
         // save user info
@@ -152,7 +151,8 @@ export const useUserStore = defineStore({
     async logout(goLogin = false) {
       if (this.getToken) {
         try {
-          await doLogout();
+          // 不需要发送请求，直接注销
+          // await doLogout();
         } catch {
           console.log('注销Token失败');
         }
@@ -164,7 +164,7 @@ export const useUserStore = defineStore({
     },
 
     /**
-     * @description: Confirm before logging out
+     * @description: 登出前确认
      */
     confirmLoginOut() {
       const { createConfirm } = useMessage();
@@ -181,7 +181,7 @@ export const useUserStore = defineStore({
   },
 });
 
-// Need to be used outside the setup
+// 需要在设置外使用
 export function useUserStoreWithOut() {
   return useUserStore(store);
 }

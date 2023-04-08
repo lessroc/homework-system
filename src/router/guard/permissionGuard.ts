@@ -31,7 +31,7 @@ export function createPermissionGuard(router: Router) {
 
     const token = userStore.getToken;
 
-    // Whitelist can be directly entered
+    // 可以直接进入白名单
     if (whitePathList.includes(to.path as PageEnum)) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;
@@ -47,15 +47,15 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    // token does not exist
+    // token 不存在
     if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
+      // 您可以未经许可访问。您需要将路由 meta.ignoreAuth 设置为 true
       if (to.meta.ignoreAuth) {
         next();
         return;
       }
 
-      // redirect login page
+      // 重定向登录页面
       const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
         path: LOGIN_PATH,
         replace: true,
@@ -70,7 +70,7 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    // Jump to the 404 page after processing the login
+    // 处理登录后跳转到 404 页面
     if (
       from.path === LOGIN_PATH &&
       to.name === PAGE_NOT_FOUND_ROUTE.name &&
@@ -80,7 +80,7 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    // get userinfo while last fetch time is empty
+    // 在上次获取时间为空时获取用户信息
     if (userStore.getLastUpdateTime === 0) {
       try {
         await userStore.getUserInfoAction();

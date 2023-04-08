@@ -7,7 +7,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo } from '/@/api/sys/user';
+import { doLogout } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -94,10 +94,11 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginHomeworkApi(loginParams, mode);
         const { token, userId, userName, userType } = data;
-        console.log('登录成功返回的数据:', data, userId);
-        let userInfo = { userId, userName, userType };
+        // console.log('登录成功返回的数据:', data, userId);
+        let userInfo: any = { userId, userName, userType };
         userInfo = handleGetUserInfoData(userInfo);
-        console.log('处理后的用户信息:', userInfo);
+        // console.log('处理后的用户信息:', userInfo);
+        // save user info
         this.setUserInfo(userInfo);
 
         // save token
@@ -131,7 +132,9 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
+      // const userInfo = await getUserInfo();
+      // 登录成功后，处理用户角色信息，将角色信息存入 store 中，这里不再从后端获取
+      const userInfo = this.getUserInfo;
       const { roles = [] } = userInfo;
       if (isArray(roles)) {
         const roleList = roles.map((item) => item.value) as RoleEnum[];

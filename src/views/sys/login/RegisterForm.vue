@@ -10,22 +10,6 @@
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
-        <Input
-          size="large"
-          v-model:value="formData.mobile"
-          :placeholder="t('sys.login.mobile')"
-          class="fix-auto-fill"
-        />
-      </FormItem>
-      <FormItem name="sms" class="enter-x">
-        <CountdownInput
-          size="large"
-          class="fix-auto-fill"
-          v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
-        />
-      </FormItem>
       <FormItem name="password" class="enter-x">
         <StrengthMeter
           size="large"
@@ -42,8 +26,16 @@
         />
       </FormItem>
 
+      <FormItem name="userType">
+        <RadioGroup v-model:value="formData.userType">
+          <Radio :value="1">{{ t('sys.login.student') }}</Radio>
+          <Radio :value="2">{{ t('sys.login.teacher') }}</Radio>
+          <Radio :value="3">{{ t('sys.login.admin') }}</Radio>
+        </RadioGroup>
+      </FormItem>
+
       <FormItem class="enter-x" name="policy">
-        <!-- No logic, you need to deal with it yourself -->
+        <!-- 没有逻辑，需要自己处理 -->
         <Checkbox v-model:checked="formData.policy" size="small">
           {{ t('sys.login.policy') }}
         </Checkbox>
@@ -68,11 +60,11 @@
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Input, Button, Checkbox } from 'ant-design-vue';
+  import { Form, Input, Button, Checkbox, RadioGroup, Radio } from 'ant-design-vue';
   import { StrengthMeter } from '/@/components/StrengthMeter';
-  import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { registerHomeworkApi } from '/@/views/homeworkSystem/api/sys/user';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
@@ -86,8 +78,7 @@
     account: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
-    sms: '',
+    userType: '',
     policy: false,
   });
 
@@ -100,5 +91,25 @@
     const data = await validForm();
     if (!data) return;
     console.log(data);
+    // 发送注册请求
+    loading.value = true;
+    // 处理表单数据
+    const params = handleFormData(data);
+    registerHomeworkApi(params)
+      .then(() => {
+        handleBackLogin();
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  }
+
+  function handleFormData(data) {
+    const { account, password, userType } = data;
+    return {
+      userName: account,
+      password,
+      userType,
+    };
   }
 </script>

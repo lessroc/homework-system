@@ -50,6 +50,10 @@ export function useFormRules(formData?: Recordable) {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
   };
 
+  const validateUserType = async (_: RuleObject, value: boolean) => {
+    return !value ? Promise.reject(t('sys.login.userTypePlaceholder')) : Promise.resolve();
+  };
+
   const validateConfirmPassword = (password: string) => {
     return async (_: RuleObject, value: string) => {
       if (!value) {
@@ -73,33 +77,40 @@ export function useFormRules(formData?: Recordable) {
       mobile: mobileFormRule,
     };
     switch (unref(currentState)) {
-      // register form rules
+      // 注册表单验证规则
       case LoginStateEnum.REGISTER:
         return {
+          // @ts-ignore
           account: accountFormRule,
+          // @ts-ignore
           password: passwordFormRule,
           confirmPassword: [
             { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
           ],
+          userType: [{ validator: validateUserType, trigger: 'change' }],
           policy: [{ validator: validatePolicy, trigger: 'change' }],
           ...mobileRule,
         };
 
-      // reset password form rules
+      // 重置密码表单规则
       case LoginStateEnum.RESET_PASSWORD:
         return {
+          // @ts-ignore
           account: accountFormRule,
           ...mobileRule,
         };
 
-      // mobile form rules
+      // 手机号验证码表单规则
       case LoginStateEnum.MOBILE:
+        // @ts-ignore
         return mobileRule;
 
-      // login form rules
+      // 登录表单规则
       default:
         return {
+          // @ts-ignore
           account: accountFormRule,
+          // @ts-ignore
           password: passwordFormRule,
         };
     }

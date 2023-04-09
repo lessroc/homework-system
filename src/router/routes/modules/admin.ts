@@ -7,16 +7,17 @@ const teacher: AppRouteModule = {
   path: '/admin',
   name: 'Admin',
   component: LAYOUT,
-  redirect: '/admin/index',
+  redirect: '/admin',
   meta: {
     hideChildrenInMenu: true,
     icon: 'simple-icons:about-dot-me',
     title: t('routes.homeworkSystem.admin'),
     orderNo: 40,
+    roles: ['admin', 'super'],
   },
   children: [
     {
-      path: 'index',
+      path: '',
       name: 'AdminPage',
       component: () => import('/@/views/homeworkSystem/admin/index.vue'),
       meta: {

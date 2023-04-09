@@ -7,16 +7,17 @@ const teacher: AppRouteModule = {
   path: '/teacher',
   name: 'Teacher',
   component: LAYOUT,
-  redirect: '/teacher/index',
+  redirect: '/teacher',
   meta: {
     hideChildrenInMenu: true,
     icon: 'simple-icons:about-dot-me',
     title: t('routes.homeworkSystem.teacher'),
     orderNo: 20,
+    roles: ['teacher', 'super'],
   },
   children: [
     {
-      path: 'index',
+      path: '',
       name: 'TeacherPage',
       component: () => import('/@/views/homeworkSystem/teacher/index.vue'),
       meta: {

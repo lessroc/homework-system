@@ -25,51 +25,25 @@
       />
     </FormItem>
 
-    <ARow class="enter-x">
-      <ACol :span="12">
-        <FormItem>
-          <!-- No logic, you need to deal with it yourself -->
-          <Checkbox v-model:checked="rememberMe" size="small">
-            {{ t('sys.login.rememberMe') }}
-          </Checkbox>
-        </FormItem>
-      </ACol>
-      <ACol :span="12">
-        <FormItem :style="{ 'text-align': 'right' }">
-          <!-- No logic, you need to deal with it yourself -->
-          <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
-            {{ t('sys.login.forgetPassword') }}
-          </Button>
-        </FormItem>
-      </ACol>
-    </ARow>
-
     <FormItem class="enter-x">
       <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
       </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
+      <Button
+        size="large"
+        class="mt-4 enter-x"
+        block
+        @click="setLoginState(LoginStateEnum.REGISTER)"
+      >
         {{ t('sys.login.registerButton') }}
-      </Button> -->
+      </Button>
     </FormItem>
-    <ARow class="enter-x">
-      <ACol :md="8" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
-          {{ t('sys.login.mobileSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="6" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
-          {{ t('sys.login.registerButton') }}
-        </Button>
-      </ACol>
-    </ARow>
   </Form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
+  import { Form, Input, Button } from 'ant-design-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -78,10 +52,9 @@
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { onKeyStroke } from '@vueuse/core';
   //import { onKeyStroke } from '@vueuse/core';
 
-  const ACol = Col;
-  const ARow = Row;
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
@@ -94,7 +67,6 @@
 
   const formRef = ref();
   const loading = ref(false);
-  const rememberMe = ref(false);
 
   const formData = reactive({
     account: '黄老师',
@@ -103,7 +75,7 @@
 
   const { validForm } = useFormValid(formRef);
 
-  //onKeyStroke('Enter', handleLogin);
+  onKeyStroke('Enter', handleLogin);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
@@ -115,7 +87,7 @@
       const userInfo = await userStore.login({
         password: data.password,
         userName: data.account,
-        mode: 'none', //不要默认的错误提示
+        mode: 'none', // 不要默认的错误提示
       });
       if (userInfo) {
         notification.success({

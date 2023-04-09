@@ -85,12 +85,19 @@ export default {
     mobilePlaceholder: 'Please input mobile',
     policyPlaceholder: 'Register after checking',
     diffPwd: 'The two passwords are inconsistent',
+    userTypePlaceholder: 'Please select user role',
 
     userName: 'Username',
     password: 'Password',
     confirmPassword: 'Confirm Password',
+    userRole: 'User Role',
     email: 'Email',
     smsCode: 'SMS code',
     mobile: 'Mobile',
+
+    // role
+    student: 'Student',
+    teacher: 'Teacher',
+    admin: 'Admin',
   },
 };

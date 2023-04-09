@@ -6,6 +6,15 @@ export interface LoginParams {
   password: string;
 }
 
+/**
+ * @description: Register interface parameters
+ */
+export interface RegisterParams {
+  userName: string;
+  password: string;
+  userType: string;
+}
+
 export interface RoleInfo {
   roleName: string;
   value: string;
@@ -20,6 +29,15 @@ export interface LoginResultModel {
   userName: string;
   userType: string | number;
   role: RoleInfo;
+}
+
+/**
+ * @description: Register interface return value
+ */
+export interface RegisterResultModel {
+  code: number;
+  result: boolean;
+  message: string;
 }
 
 /**

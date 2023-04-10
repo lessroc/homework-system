@@ -266,7 +266,7 @@ export const homeworkHttp = createAxios({
     // mock 接口地址
     // apiUrl: 'http://127.0.0.1:4523/m1/2485078-0-default',
     // 正式环境 接口地址
-    apiUrl: 'https://frp-any.top:32028',
+    apiUrl: globSetting.jobSys,
     // 接口拼接地址
     // urlPrefix: urlPrefix,
     // 需要对返回数据进行处理

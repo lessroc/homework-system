@@ -1,7 +1,7 @@
 <template>
   <Card title="课程列表" v-bind="$attrs">
     <template #extra>
-      <a-button type="link" size="small" @click="showCreateCourseModalBox">新建课程</a-button>
+      <Button type="link" size="small" @click="showCreateCourseModalBox">新建课程</Button>
     </template>
     <!--<List item-layout="horizontal" :data-source="dynamicInfoItems">
       <template #renderItem="{ item }">
@@ -60,12 +60,25 @@
         <FormItem label="课程描述：" name="courseDesc">
           <Textarea v-model:value="formState.courseDesc" />
         </FormItem>
+        <FormItem label="课程封面：" name="coverUrl">
+          <UploadCourseCover @set-cover-url="setCoverUrl" />
+        </FormItem>
       </Form>
     </Modal>
   </Card>
 </template>
 <script lang="ts" setup>
-  import { Card, List, Avatar, Modal, Form, FormItem, Input, Textarea } from 'ant-design-vue';
+  import {
+    Button,
+    Card,
+    List,
+    Avatar,
+    Modal,
+    Form,
+    FormItem,
+    Input,
+    Textarea,
+  } from 'ant-design-vue';
   import { ref } from 'vue';
   // import { dynamicInfoItems } from './data';
   // import { Icon } from '/@/components/Icon';
@@ -110,23 +123,27 @@
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { reactive, toRaw, UnwrapRef } from 'vue';
   import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
+  import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
 
   // 表单
   interface FormState {
     courseName: string;
     courseDesc: string;
+    coverUrl: string;
   }
   const formRef = ref();
   const formState: UnwrapRef<FormState> = reactive({
     courseName: '',
     courseDesc: '',
+    coverUrl: '',
   });
   const rules = {
-    name: [
+    courseName: [
       { required: true, message: '请输入课程名称', trigger: 'blur' },
       { min: 2, max: 5, message: '长度应为 2 至 5', trigger: 'blur' },
     ],
-    desc: [{ required: true, message: '请输入课程描述', trigger: 'blur' }],
+    courseDesc: [{ required: true, message: '请输入课程描述', trigger: 'blur' }],
+    coverUrl: [{ required: true, message: '请上传课程封面', trigger: 'blur' }],
   };
   const onSubmit = () => {
     formRef.value
@@ -149,6 +166,12 @@
   const resetForm = () => {
     showCCMB.value = false;
     formRef.value.resetFields();
+  };
+
+  import { useGlobSetting } from '/@/hooks/setting';
+  const globSetting = useGlobSetting();
+  const setCoverUrl = (url: string) => {
+    formState.coverUrl = globSetting.jobSys + url;
   };
 </script>
 

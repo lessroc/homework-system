@@ -100,6 +100,25 @@
         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
     });
   }
+
+  import { useUserStore } from '/@/store/modules/user';
+  const userStore = useUserStore();
+  const params = {
+    pageNum: 1,
+    pageSize: 3,
+    userId: userStore.getUserInfo?.userId,
+  };
+
+  // 获取课程列表
+  getTeacherCourseListApi(params)
+    .then((res) => {
+      console.log('获取课程列表成功:', res);
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   const pagination = {
     onChange: (page: number) => {
       console.log(page);
@@ -169,6 +188,7 @@
   };
 
   import { useGlobSetting } from '/@/hooks/setting';
+  import { getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
   const globSetting = useGlobSetting();
   const setCoverUrl = (url: string) => {
     formState.coverUrl = globSetting.jobSys + url;

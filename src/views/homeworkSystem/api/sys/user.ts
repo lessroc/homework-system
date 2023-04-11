@@ -1,4 +1,4 @@
-import { defHttp, homeworkHttp } from '/@/utils/http/axios';
+import { homeworkHttp } from '/@/utils/http/axios';
 import {
   LoginParams,
   LoginResultModel,
@@ -56,23 +56,6 @@ export function registerHomeworkApi(params: RegisterParams, mode: ErrorMessageMo
     },
     {
       errorMessageMode: mode,
-    },
-  );
-}
-
-export function doLogout() {
-  return defHttp.get({ url: Api.Logout });
-}
-
-export function testRetry() {
-  return defHttp.get(
-    { url: Api.TestRetry },
-    {
-      retryRequest: {
-        isOpenRetry: true,
-        count: 5,
-        waitTime: 1000,
-      },
     },
   );
 }

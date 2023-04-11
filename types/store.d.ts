@@ -23,7 +23,7 @@ export interface ErrorLogInfo {
 }
 
 export interface UserInfo {
-  userId: string | number;
+  userId: number;
   username: string;
   realName: string;
   avatar: string;

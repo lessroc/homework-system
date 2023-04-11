@@ -30,6 +30,8 @@ const transform: AxiosTransform = {
    * @description: 处理响应数据。如果数据不是预期格式，可直接抛出错误
    */
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    console.log('处理响应数据 res:', res);
+    console.log('处理响应数据 options:', options);
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
@@ -134,6 +136,7 @@ const transform: AxiosTransform = {
         config.params = undefined;
       }
     }
+    console.log('请求之前处理config:', config);
     return config;
   },
 

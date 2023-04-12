@@ -30,20 +30,12 @@ export function createCourseApi(params: CreateCourseParams, mode: ErrorMessageMo
 /**
  * 老师课程列表
  */
-export function getTeacherCourseListApi(
-  params: GetCourseListParams,
-  mode: ErrorMessageMode = 'none',
-) {
+export function getTeacherCourseListApi(params: GetCourseListParams) {
   console.log('提交的参数:', params);
-  return homeworkHttp.get<GetCourseListResultParams>(
-    {
-      url: Api.teacherCourseList,
-      data: params,
-    },
-    {
-      errorMessageMode: mode,
-    },
-  );
+  return homeworkHttp.get<GetCourseListResultParams>({
+    url: Api.teacherCourseList,
+    params,
+  });
 }
 import axios from 'axios';
 /**

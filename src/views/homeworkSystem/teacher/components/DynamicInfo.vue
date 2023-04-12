@@ -20,36 +20,44 @@
       </template>
     </List>-->
     <!--OR-->
-    <List item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
+    <List
+      item-layout="vertical"
+      size="large"
+      :data-source="teacherCourseList.list"
+      :loading="loading"
+    >
+      <template #footer>
+        <Pagination
+          class="paginationStyle"
+          v-model:current="teacherCourseList.pageNum"
+          show-quick-jumper
+          :total="teacherCourseList.total"
+          :defaultPageSize="teacherCourseList.pageSize"
+          :hideOnSinglePage="true"
+          @change="onChange"
+        />
+      </template>
       <template #renderItem="{ item }">
         <ListItem key="item.title">
           <template #actions>
-            <span v-for="{ type, text } in actions" :key="type">
+            <a-button type="primary">编辑课程</a-button>
+            <a-button type="primary">删除课程</a-button>
+            <!--<span v-for="{ type, text } in actions" :key="type">
               <component :is="type" style="margin-right: 8px" />
               {{ text }}
-            </span>
+            </span>-->
           </template>
           <template #extra>
-            <img
-              width="272"
-              alt="logo"
-              src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-            />
+            <img width="272" style="border-radius: 5px" alt="课程封面" :src="item.coverUrl" />
           </template>
-          <ListItemMeta :description="item.description">
+          <ListItemMeta :description="item.courseDesc">
             <template #title>
-              <a :href="item.href">{{ item.title }}</a>
+              <a :href="item.href">{{ item.courseName }}</a>
             </template>
-            <template #avatar><Avatar :src="item.avatar" /></template>
+            <!--<template #avatar><Avatar :src="item.avatar" /></template>-->
           </ListItemMeta>
           {{ item.content }}
         </ListItem>
-      </template>
-      <template #footer>
-        <div>
-          <b>ant design vue</b>
-          footer part
-        </div>
       </template>
     </List>
     <Modal v-model:visible="showCCMB" title="新建课程" centered @cancel="resetForm" @ok="onSubmit">
@@ -72,64 +80,72 @@
     Button,
     Card,
     List,
-    Avatar,
     Modal,
     Form,
     FormItem,
     Input,
     Textarea,
+    Pagination,
   } from 'ant-design-vue';
-  import { ref } from 'vue';
+  import { onBeforeMount, ref } from 'vue';
   // import { dynamicInfoItems } from './data';
   // import { Icon } from '/@/components/Icon';
+  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
+  import { reactive, toRaw, UnwrapRef } from 'vue';
+  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
+  import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
+  import { useGlobSetting } from '/@/hooks/setting';
+  import { getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
+  import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
 
   const ListItem = List.Item;
   const ListItemMeta = List.Item.Meta;
 
-  // OR
-  const listData: Record<string, string>[] = [];
+  onBeforeMount(() => {
+    getTeacherCourseList(1);
+  });
 
-  for (let i = 0; i < 23; i++) {
-    listData.push({
-      href: 'https://www.antdv.com/',
-      title: `课程名称 ${i}`,
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-      description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-  }
+  let teacherCourseList: GetCourseListResultParams = reactive({
+    pageNum: 1,
+    pageSize: 3,
+    total: 0,
+    totalPage: 0,
+    list: [],
+  });
 
   import { useUserStore } from '/@/store/modules/user';
   const userStore = useUserStore();
-  const params = {
-    pageNum: 1,
-    pageSize: 3,
-    userId: userStore.getUserInfo?.userId,
-  };
 
-  // 获取课程列表
-  getTeacherCourseListApi(params)
-    .then((res) => {
-      console.log('获取课程列表成功:', res);
-      console.log(res);
+  // 加载中
+  let loading = ref<boolean>(false);
+
+  // 获取指定页的课程列表
+  function getTeacherCourseList(pageNum: number) {
+    loading.value = true;
+    getTeacherCourseListApi({
+      pageNum,
+      pageSize: 3,
+      userId: userStore.getUserInfo?.userId,
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((res) => {
+        console.log('获取课程列表成功:', res);
+        delete res.pageNum;
+        teacherCourseList = Object.assign(teacherCourseList, res);
+      })
+      .catch((err) => {
+        console.log('获取课程列表失败:', err);
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  }
 
-  const pagination = {
-    onChange: (page: number) => {
-      console.log(page);
-    },
-    pageSize: 3,
+  const onChange = (pageNumber: number) => {
+    console.log('Page: ', pageNumber);
+    // 跳转到指定页
+    getTeacherCourseList(pageNumber);
+    teacherCourseList.pageNum = pageNumber;
   };
-  const actions: Record<string, string>[] = [
-    { type: 'StarOutlined', text: '156' },
-    { type: 'LikeOutlined', text: '156' },
-    { type: 'MessageOutlined', text: '2' },
-  ];
 
   // 显示新建课程模态框
   let showCCMB = ref<boolean>(false);
@@ -138,11 +154,6 @@
     console.log('showCreateCourseModalBox');
     showCCMB.value = true;
   }
-
-  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import { reactive, toRaw, UnwrapRef } from 'vue';
-  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
-  import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
 
   // 表单
   interface FormState {
@@ -173,6 +184,8 @@
           .then((res) => {
             console.log('res', res);
             showCCMB.value = false;
+            getTeacherCourseList(1);
+            teacherCourseList.pageNum = 1;
           })
           .catch((err) => {
             console.log('err', err);
@@ -187,8 +200,6 @@
     formRef.value.resetFields();
   };
 
-  import { useGlobSetting } from '/@/hooks/setting';
-  import { getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
   const globSetting = useGlobSetting();
   const setCoverUrl = (url: string) => {
     formState.coverUrl = globSetting.jobSys + url;
@@ -198,5 +209,10 @@
 <style lang="less" scoped>
   .CCMBForm {
     padding: 16px;
+  }
+
+  .ant-pagination {
+    margin-top: 16px;
+    text-align: center;
   }
 </style>

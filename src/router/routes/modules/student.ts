@@ -13,7 +13,7 @@ const teacher: AppRouteModule = {
     icon: 'simple-icons:about-dot-me',
     title: t('routes.homeworkSystem.student'),
     orderNo: 30,
-    roles: ['student', 'super'],
+    // roles: ['student', 'super'],
   },
   children: [
     {

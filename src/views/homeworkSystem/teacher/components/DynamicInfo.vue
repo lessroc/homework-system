@@ -1,7 +1,7 @@
 <template>
   <Card title="课程列表" v-bind="$attrs">
     <template #extra>
-      <Button type="link" size="small" @click="showCreateCourseModalBox">新建课程</Button>
+      <Button type="link" size="small" @click="showCreateCourseModalBox(true)">新建课程</Button>
     </template>
     <!--<List item-layout="horizontal" :data-source="dynamicInfoItems">
       <template #renderItem="{ item }">
@@ -37,15 +37,17 @@
           @change="onChange"
         />
       </template>
-      <template #renderItem="{ item }">
+      <template #renderItem="{ item, index }">
         <ListItem key="item.title">
           <template #actions>
-            <a-button type="primary">编辑课程</a-button>
-            <a-button type="primary">删除课程</a-button>
-            <!--<span v-for="{ type, text } in actions" :key="type">
-              <component :is="type" style="margin-right: 8px" />
-              {{ text }}
-            </span>-->
+            <Button type="link" @click="editCourse(index)">
+              <template #icon><FormOutlined /></template>
+              编辑课程
+            </Button>
+            <Button type="link" @click="deleteCourse(index)">
+              <template #icon><DeleteOutlined /></template>
+              删除课程
+            </Button>
           </template>
           <template #extra>
             <img width="272" style="border-radius: 5px" alt="课程封面" :src="item.coverUrl" />
@@ -69,7 +71,8 @@
           <Textarea v-model:value="formState.courseDesc" />
         </FormItem>
         <FormItem label="课程封面：" name="coverUrl">
-          <UploadCourseCover @set-cover-url="setCoverUrl" />
+          <!--传参给子组件-->
+          <UploadCourseCover :cover-url="formState.coverUrl" @set-cover-url="setCoverUrl" />
         </FormItem>
       </Form>
     </Modal>
@@ -87,20 +90,21 @@
     Textarea,
     Pagination,
   } from 'ant-design-vue';
-  import { onBeforeMount, ref } from 'vue';
   // import { dynamicInfoItems } from './data';
   // import { Icon } from '/@/components/Icon';
+  import { onBeforeMount, ref, reactive, toRaw } from 'vue';
+  import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import { reactive, toRaw, UnwrapRef } from 'vue';
   import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
   import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
   import { useGlobSetting } from '/@/hooks/setting';
-  import { getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
+  import { editCourseApi, getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
   import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
 
   const ListItem = List.Item;
   const ListItemMeta = List.Item.Meta;
 
+  // 挂载前获取课程列表
   onBeforeMount(() => {
     getTeacherCourseList(1);
   });
@@ -140,18 +144,52 @@
       });
   }
 
+  // 页码改变的回调
   const onChange = (pageNumber: number) => {
     console.log('Page: ', pageNumber);
     // 跳转到指定页
     getTeacherCourseList(pageNumber);
     teacherCourseList.pageNum = pageNumber;
   };
+  let currEditCourseBackup: any = '';
+  let isEditCourse = false;
+  let currEditCourseIndex = 0;
+  // 编辑课程
+  function editCourse(index) {
+    console.log('editCourse', index);
+    isEditCourse = true;
+    currEditCourseIndex = index;
+    // 设置表单数据
+    const { courseName, courseDesc, coverUrl } = teacherCourseList.list[index];
+    // 备份当前编辑的课程
+    currEditCourseBackup = teacherCourseList.list[index];
+    formState = Object.assign(formState, {
+      courseName,
+      courseDesc,
+      coverUrl,
+    });
+    console.log('formState', formState);
+    // 弹起模态框
+    showCreateCourseModalBox();
+  }
+
+  // 删除课程
+  function deleteCourse(index) {
+    console.log('deleteCourse', index);
+  }
 
   // 显示新建课程模态框
   let showCCMB = ref<boolean>(false);
 
-  function showCreateCourseModalBox() {
-    console.log('showCreateCourseModalBox');
+  function showCreateCourseModalBox(resetForm = false) {
+    // 重置表单
+    if (resetForm) {
+      formState = Object.assign(formState, {
+        courseName: '',
+        courseDesc: '',
+        coverUrl: '',
+      });
+    }
     showCCMB.value = true;
   }
 
@@ -162,7 +200,7 @@
     coverUrl: string;
   }
   const formRef = ref();
-  const formState: UnwrapRef<FormState> = reactive({
+  let formState = reactive<FormState>({
     courseName: '',
     courseDesc: '',
     coverUrl: '',
@@ -178,18 +216,42 @@
   const onSubmit = () => {
     formRef.value
       .validate()
-      .then(() => {
+      .then(async () => {
         console.log('values', formState, toRaw(formState));
-        createCourseMethod(formState)
-          .then((res) => {
-            console.log('res', res);
-            showCCMB.value = false;
+        // 如果是编辑课程则调用编辑课程接口
+        const result = isEditCourse
+          ? await editCourseApi(toRaw(formState))
+          : await createCourseMethod(toRaw(formState));
+        if (result) {
+          // 如果是编辑课程则更新课程列表
+          if (isEditCourse) {
+            // 更新课程列表
+            const { courseName, courseDesc, coverUrl } = formState;
+            const { courseId, teacherId, teacherName } = currEditCourseBackup;
+            teacherCourseList.list[currEditCourseIndex] = {
+              courseId,
+              courseName,
+              courseDesc,
+              coverUrl,
+              teacherId,
+              teacherName,
+            };
+            // 重置编辑状态
+            isEditCourse = false;
+          } else {
+            // 如果是新建课程则更新课程列表
             getTeacherCourseList(1);
             teacherCourseList.pageNum = 1;
-          })
-          .catch((err) => {
-            console.log('err', err);
+          }
+          // 重置表单
+          formState = Object.assign(formState, {
+            courseName: '',
+            courseDesc: '',
+            coverUrl: '',
           });
+          // 关闭模态框
+          showCCMB.value = false;
+        }
       })
       .catch((error: ValidateErrorEntity<FormState>) => {
         console.log('error', error);
@@ -197,7 +259,7 @@
   };
   const resetForm = () => {
     showCCMB.value = false;
-    formRef.value.resetFields();
+    // formRef.value.resetFields();
   };
 
   const globSetting = useGlobSetting();

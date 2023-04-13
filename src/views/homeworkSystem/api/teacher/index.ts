@@ -10,6 +10,7 @@ import {
 enum Api {
   createCourse = '/course/create',
   teacherCourseList = '/course/teacherCourseList',
+  editCourse = '/course/edit',
 }
 
 /**
@@ -37,16 +38,18 @@ export function getTeacherCourseListApi(params: GetCourseListParams) {
     params,
   });
 }
-import axios from 'axios';
+
 /**
- * 老师课程列表 axios
+ * 编辑课程
  */
-export function getTeacherCourseListAxiosApi(params: GetCourseListParams) {
-  console.log('获取课程列表成功Axios提交的参数:', params);
-  return axios({
-    method: 'GET',
-    headers: { 'content-type': 'application/json' },
-    data: params,
-    url: import.meta.env.VITE_GLOB_API_JOB_SYS_URL + Api.teacherCourseList,
-  });
+export function editCourseApi(params: CreateCourseParams, mode: ErrorMessageMode = 'modal') {
+  return homeworkHttp.post<CreateCourseResultParams>(
+    {
+      url: Api.editCourse,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
 }

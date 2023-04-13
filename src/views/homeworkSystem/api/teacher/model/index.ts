@@ -34,7 +34,7 @@ export interface GetCourseListResultParams {
   /**
    * 分页数据
    */
-  list?: CourseListDTO[];
+  list: CourseListDTO[];
   /**
    * 当前页码
    */

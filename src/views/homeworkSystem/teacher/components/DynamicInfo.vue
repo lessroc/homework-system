@@ -44,10 +44,12 @@
               <template #icon><FormOutlined /></template>
               编辑课程
             </Button>
-            <Button type="link" @click="deleteCourse(index)">
-              <template #icon><DeleteOutlined /></template>
-              删除课程
-            </Button>
+            <Popconfirm title="确定删除该课程？" placement="right" @confirm="confirm(index)">
+              <Button type="link">
+                <template #icon><DeleteOutlined /></template>
+                删除课程
+              </Button>
+            </Popconfirm>
           </template>
           <template #extra>
             <img width="272" style="border-radius: 5px" alt="课程封面" :src="item.coverUrl" />
@@ -79,6 +81,9 @@
   </Card>
 </template>
 <script lang="ts" setup>
+  // import { dynamicInfoItems } from './data';
+  // import { Icon } from '/@/components/Icon';
+  import { onBeforeMount, ref, reactive, toRaw } from 'vue';
   import {
     Button,
     Card,
@@ -89,16 +94,21 @@
     Input,
     Textarea,
     Pagination,
+    Popconfirm,
   } from 'ant-design-vue';
-  // import { dynamicInfoItems } from './data';
-  // import { Icon } from '/@/components/Icon';
-  import { onBeforeMount, ref, reactive, toRaw } from 'vue';
   import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
+  import {
+    createCourseMethod,
+    replaceCoverUrl,
+  } from '/@/views/homeworkSystem/utils/teacherMethods';
   import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
   import { useGlobSetting } from '/@/hooks/setting';
-  import { editCourseApi, getTeacherCourseListApi } from '/@/views/homeworkSystem/api/teacher';
+  import {
+    deleteCourseApi,
+    editCourseApi,
+    getTeacherCourseListApi,
+  } from '/@/views/homeworkSystem/api/teacher';
   import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
 
   const ListItem = List.Item;
@@ -124,7 +134,7 @@
   let loading = ref<boolean>(false);
 
   // 获取指定页的课程列表
-  function getTeacherCourseList(pageNum: number) {
+  const getTeacherCourseList = (pageNum: number | undefined) => {
     loading.value = true;
     getTeacherCourseListApi({
       pageNum,
@@ -133,6 +143,7 @@
     })
       .then((res) => {
         console.log('获取课程列表成功:', res);
+        res.list = replaceCoverUrl(res.list);
         delete res.pageNum;
         teacherCourseList = Object.assign(teacherCourseList, res);
       })
@@ -142,7 +153,7 @@
       .finally(() => {
         loading.value = false;
       });
-  }
+  };
 
   // 页码改变的回调
   const onChange = (pageNumber: number) => {
@@ -155,7 +166,7 @@
   let isEditCourse = false;
   let currEditCourseIndex = 0;
   // 编辑课程
-  function editCourse(index) {
+  const editCourse = (index) => {
     console.log('editCourse', index);
     isEditCourse = true;
     currEditCourseIndex = index;
@@ -171,17 +182,28 @@
     console.log('formState', formState);
     // 弹起模态框
     showCreateCourseModalBox();
-  }
-
-  // 删除课程
-  function deleteCourse(index) {
-    console.log('deleteCourse', index);
-  }
+  };
+  const confirm = (index) => {
+    return new Promise((resolve) => {
+      // 删除课程
+      const { courseId } = teacherCourseList.list[index];
+      deleteCourseApi({ courseId })
+        .then((res) => {
+          console.log('删除课程成功:', res);
+          resolve(true);
+          // 重新获取课程列表
+          getTeacherCourseList(teacherCourseList.pageNum);
+        })
+        .catch((err) => {
+          console.log('删除课程失败:', err);
+        });
+    });
+  };
 
   // 显示新建课程模态框
   let showCCMB = ref<boolean>(false);
 
-  function showCreateCourseModalBox(resetForm = false) {
+  const showCreateCourseModalBox = (resetForm = false) => {
     // 重置表单
     if (resetForm) {
       formState = Object.assign(formState, {
@@ -191,7 +213,7 @@
       });
     }
     showCCMB.value = true;
-  }
+  };
 
   // 表单
   interface FormState {

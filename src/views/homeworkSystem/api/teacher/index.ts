@@ -11,6 +11,7 @@ enum Api {
   createCourse = '/course/create',
   teacherCourseList = '/course/teacherCourseList',
   editCourse = '/course/edit',
+  deleteCourse = '/course/delete',
 }
 
 /**
@@ -46,6 +47,24 @@ export function editCourseApi(params: CreateCourseParams, mode: ErrorMessageMode
   return homeworkHttp.post<CreateCourseResultParams>(
     {
       url: Api.editCourse,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
+}
+
+/**
+ * 删除课程
+ */
+export function deleteCourseApi(
+  params: { courseId: number | undefined },
+  mode: ErrorMessageMode = 'modal',
+) {
+  return homeworkHttp.post<CreateCourseResultParams>(
+    {
+      url: Api.deleteCourse,
       params,
     },
     {

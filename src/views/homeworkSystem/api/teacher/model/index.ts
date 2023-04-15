@@ -60,25 +60,25 @@ export interface CourseListDTO {
   /**
    * 课程描述
    */
-  courseDesc?: string;
+  courseDesc: string;
   /**
    * 课程id
    */
-  courseId?: number;
+  courseId: number;
   /**
    * 课程name
    */
-  courseName?: string;
+  courseName: string;
   /**
    * 课程封面url
    */
-  coverUrl?: string;
+  coverUrl: string;
   /**
    * 老师id
    */
-  teacherId?: number;
+  teacherId: number;
   /**
    * 老师name
    */
-  teacherName?: string;
+  teacherName: string;
 }

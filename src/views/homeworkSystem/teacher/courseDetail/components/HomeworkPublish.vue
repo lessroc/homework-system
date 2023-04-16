@@ -30,6 +30,7 @@
   import { Form, Input, Textarea, Button, RangePicker, message } from 'ant-design-vue';
   import { publishHomeworkApi } from '/@/views/homeworkSystem/api/teacher';
   const FormItem = Form.Item;
+  const props = defineProps<{ courseId: number }>();
 
   const loading = ref(false);
 
@@ -52,6 +53,7 @@
     console.log('Success:', values, formState);
     loading.value = true;
     publishHomeworkApi({
+      courseId: props.courseId,
       title: formState.title,
       desc: formState.desc,
       startTime: formState.rangeTimePicker[0],

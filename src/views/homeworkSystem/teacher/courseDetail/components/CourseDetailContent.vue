@@ -7,11 +7,10 @@
     @tab-change="(key) => onTabChange(key)"
   >
     <p v-if="noTitleKey === '作业列表'">
-      <!-- 组件缓存 -->
-      <HomeworkList :courseDetail="courseDetail" />
+      <HomeworkList :courseId="props.courseDetail.courseId" />
     </p>
     <p v-else-if="noTitleKey === '发布作业'">
-      <HomeworkPublish />
+      <HomeworkPublish :courseId="props.courseDetail.courseId" />
     </p>
   </Card>
 </template>

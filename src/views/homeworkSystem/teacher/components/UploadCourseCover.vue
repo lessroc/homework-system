@@ -1,7 +1,7 @@
 <template>
   <div class="clearfix">
     <Upload
-      action="https://frp-any.top:32028/homework/uploadFile"
+      action="http://342j6q8933.wicp.vip/homework/uploadFile"
       list-type="picture-card"
       v-model:file-list="fileList"
       @preview="handlePreview"
@@ -25,6 +25,9 @@
   import { ref, watch } from 'vue';
   import { Upload, Modal } from 'ant-design-vue';
   import { PlusOutlined } from '@ant-design/icons-vue';
+  import { useGlobSetting } from '/@/hooks/setting';
+  const globSetting = useGlobSetting();
+  const basisUrl = globSetting.jobSys;
 
   const fakeFileList: any = [
     {
@@ -85,15 +88,15 @@
   let fileList = ref<FileItem[]>([]);
   // 如果父元素有传值，就将值赋值给fileList
   if (props.coverUrl) {
-    fakeFileList[0].preview = ref(props.coverUrl);
-    fakeFileList[0].thumbUrl = ref(props.coverUrl);
+    fakeFileList[0].preview = ref(basisUrl + props.coverUrl);
+    fakeFileList[0].thumbUrl = ref(basisUrl + props.coverUrl);
     fileList.value = fakeFileList;
   }
   watch(
     () => props.coverUrl,
     (newVal) => {
-      fakeFileList[0].preview = ref(newVal);
-      fakeFileList[0].thumbUrl = ref(newVal);
+      fakeFileList[0].preview = ref(basisUrl + newVal);
+      fakeFileList[0].thumbUrl = ref(basisUrl + newVal);
       fileList.value = fakeFileList;
       newVal === '' && (fileList.value = []);
     },

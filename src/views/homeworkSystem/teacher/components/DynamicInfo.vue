@@ -225,11 +225,13 @@
       formState = Object.assign(formState, {
         courseName: '',
         courseDesc: '',
-        coverUrl: '',
+        coverUrl: defaultCoverUrl || '',
       });
     }
     showCCMB.value = true;
   };
+
+  const defaultCoverUrl = '/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
 
   // 表单
   interface FormState {
@@ -241,7 +243,7 @@
   let formState = reactive<FormState>({
     courseName: '',
     courseDesc: '',
-    coverUrl: '',
+    coverUrl: defaultCoverUrl || '',
   });
   const rules = {
     courseName: [
@@ -285,7 +287,7 @@
           formState = Object.assign(formState, {
             courseName: '',
             courseDesc: '',
-            coverUrl: '',
+            coverUrl: defaultCoverUrl || '',
           });
           // 关闭模态框
           showCCMB.value = false;

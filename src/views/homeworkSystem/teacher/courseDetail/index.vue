@@ -27,6 +27,7 @@
     await getCourseDetailApi({ courseId: Number(courseId) }).then((res) => {
       console.log('获取课程详情成功:', res);
       res.coverUrl = res.coverUrl.replace('https://frp-any.top:32028', basisUrl);
+      res.coverUrl = /^\/static/.test(res.coverUrl) ? basisUrl + res.coverUrl : res.coverUrl;
       courseDetail.value = res;
     });
   };

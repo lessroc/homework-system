@@ -26,6 +26,16 @@ const teacher: AppRouteModule = {
         hideMenu: true,
       },
     },
+    {
+      path: 'course-detail/:id',
+      name: 'CourseDetail',
+      component: () => import('/@/views/homeworkSystem/teacher/courseDetail/index.vue'),
+      meta: {
+        title: t('routes.homeworkSystem.courseDetail'),
+        icon: 'simple-icons:about-dot-me',
+        hideMenu: true,
+      },
+    },
   ],
 };
 

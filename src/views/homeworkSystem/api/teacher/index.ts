@@ -6,12 +6,16 @@ import {
   GetCourseListParams,
   GetCourseListResultParams,
 } from '/@/views/homeworkSystem/api/teacher/model';
+import { ContentTypeEnum } from '/@/enums/httpEnum';
 
 enum Api {
   createCourse = '/course/create',
   teacherCourseList = '/course/teacherCourseList',
   editCourse = '/course/edit',
   deleteCourse = '/course/delete',
+  courseDetail = '/course/detail',
+  homeworkList = '/homework/teacherHomeworkList',
+  homeworkPublish = '/homework/publish',
 }
 
 /**
@@ -66,9 +70,49 @@ export function deleteCourseApi(
     {
       url: Api.deleteCourse,
       params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
     },
     {
       errorMessageMode: mode,
     },
   );
+}
+
+/**
+ * 获取课程详情
+ */
+export function getCourseDetailApi(params: { courseId: number }) {
+  return homeworkHttp.get({
+    url: Api.courseDetail,
+    params,
+  });
+}
+
+/**
+ * 获取作业列表
+ */
+export function getHomeworkListApi(params: {
+  homeworkTopicId: number;
+  pageNum: number;
+  pageSize: number;
+}) {
+  return homeworkHttp.get({
+    url: Api.homeworkList,
+    params,
+  });
+}
+
+/**
+ * 发布作业
+ */
+export function publishHomeworkApi(params: {
+  title: string;
+  desc: string;
+  startTime: string;
+  endTime: string;
+}) {
+  return homeworkHttp.post({
+    url: Api.homeworkPublish,
+    params,
+  });
 }

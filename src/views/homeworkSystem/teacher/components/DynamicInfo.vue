@@ -38,21 +38,26 @@
         />
       </template>
       <template #renderItem="{ item, index }">
-        <ListItem key="item.title">
+        <ListItem key="item.title" @click.stop="toCourseDetail(item.courseId)">
           <template #actions>
-            <Button type="link" @click="editCourse(index)">
+            <Button type="link" @click.stop="editCourse(index)">
               <template #icon><FormOutlined /></template>
               编辑课程
             </Button>
-            <Popconfirm title="确定删除该课程？" placement="right" @confirm="confirm(index)">
-              <Button type="link">
+            <Popconfirm title="确定删除该课程？" placement="right" @confirm.stop="confirm(index)">
+              <Button type="link" @click.stop>
                 <template #icon><DeleteOutlined /></template>
                 删除课程
               </Button>
             </Popconfirm>
           </template>
           <template #extra>
-            <img width="272" style="border-radius: 5px" alt="课程封面" :src="item.coverUrl" />
+            <img
+              width="272"
+              style="border-radius: 5px"
+              alt="课程封面"
+              :src="globSetting.jobSys + item.coverUrl"
+            />
           </template>
           <ListItemMeta :description="item.courseDesc">
             <template #title>
@@ -110,9 +115,20 @@
     getTeacherCourseListApi,
   } from '/@/views/homeworkSystem/api/teacher';
   import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
+  import { useGo } from '/@/hooks/web/usePage';
+  const go = useGo();
 
   const ListItem = List.Item;
   const ListItemMeta = List.Item.Meta;
+
+  /**
+   * 打开课程详情页
+   */
+  const toCourseDetail = (courseId: number) => {
+    console.log('打开课程详情页:', courseId);
+    // go({ name: 'courseDetail', params: { courseId } });
+    go('/teacher/course-detail/' + courseId);
+  };
 
   // 挂载前获取课程列表
   onBeforeMount(() => {
@@ -293,6 +309,10 @@
 <style lang="less" scoped>
   .CCMBForm {
     padding: 16px;
+  }
+
+  .ant-list-item {
+    cursor: pointer;
   }
 
   .ant-pagination {

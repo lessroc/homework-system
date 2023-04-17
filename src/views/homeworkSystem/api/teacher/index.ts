@@ -17,6 +17,8 @@ enum Api {
   homeworkTopicList = '/homework/homeworkTopicList',
   homeworkPublish = '/homework/publish',
   homeworkList = '/homework/teacherHomeworkList',
+  homeworkDetail = '/homework/detail',
+  teacherHomeworkList = '/homework/teacherHomeworkList',
 }
 
 /**
@@ -90,7 +92,7 @@ export function getCourseDetailApi(params: { courseId: number }) {
 }
 
 /**
- * 获取作业列表
+ * 获取作业主题列表
  */
 export function getHomeworkTopicListApi(params: {
   courseId: number;
@@ -116,6 +118,30 @@ export function publishHomeworkApi(params: {
 }) {
   return homeworkHttp.post({
     url: Api.homeworkPublish,
+    params,
+  });
+}
+
+/**
+ * 获取作业详情
+ */
+export function getHomeworkDetailApi(params: { homeworkId: number }) {
+  return homeworkHttp.get({
+    url: Api.homeworkDetail,
+    params,
+  });
+}
+
+/**
+ * 获取作业答卷列表
+ */
+export function getHomeworkAnswerSheetListApi(params: {
+  homeworkTopicId: number;
+  pageNum: number;
+  pageSize: number;
+}) {
+  return homeworkHttp.get({
+    url: Api.teacherHomeworkList,
     params,
   });
 }

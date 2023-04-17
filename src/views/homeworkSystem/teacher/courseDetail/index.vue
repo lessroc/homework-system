@@ -7,7 +7,7 @@
       <CardMeta :title="courseDetail.courseName">
         <template #description>{{ courseDetail.courseDesc }}</template>
       </CardMeta>
-      <CourseDetailContent :courseDetail="courseDetail" />
+      <CourseDetailTable :courseDetail="courseDetail" />
     </Card>
   </PageWrapper>
 </template>
@@ -16,7 +16,7 @@
   import { onBeforeMount, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { getCourseDetailApi } from '/@/views/homeworkSystem/api/teacher';
-  import CourseDetailContent from './components/CourseDetailContent.vue';
+  import CourseDetailTable from './courseDetailTable/index.vue';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useRoute } from 'vue-router';
   const globSetting = useGlobSetting();

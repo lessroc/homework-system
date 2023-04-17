@@ -5,9 +5,9 @@
     v-if="homeworkList.total > 0"
     :pagination="paginationProps"
   >
-    <template #bodyCell="{ column, text }">
+    <template #bodyCell="{ text, record, column }">
       <template v-if="column.dataIndex === 'operation'">
-        <a>{{ text }}</a>
+        <a @click="toHomeworkDetail(record)">{{ text }}</a>
       </template>
     </template>
   </Table>
@@ -19,7 +19,17 @@
   import { onBeforeMount, reactive } from 'vue';
   import dayjs from 'dayjs';
   const props = defineProps<{ courseId: number }>();
+  import { useGo } from '/@/hooks/web/usePage';
+  const go = useGo();
   console.log('课程内容作业列表页面课程ID:', props.courseId);
+
+  /**
+   * 打开作业详情页
+   */
+  const toHomeworkDetail = (record) => {
+    go('/teacher/homework-details/' + record.homeworkTopicId);
+  };
+
   const columns = [
     {
       title: '名称',

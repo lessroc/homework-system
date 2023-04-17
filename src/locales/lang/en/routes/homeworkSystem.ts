@@ -4,4 +4,5 @@ export default {
   admin: 'admin',
 
   courseDetail: 'Course Detail',
+  homeworkDetail: 'Homework Details',
 };

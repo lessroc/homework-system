@@ -42,6 +42,10 @@
       title: '分数',
       dataIndex: 'score',
     },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+    },
   ];
 
   let answerSheetList = reactive({

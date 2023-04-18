@@ -46,7 +46,7 @@
 
   let answerSheetList = reactive({
     pageNum: 1,
-    pageSize: 3,
+    pageSize: 10,
     totalPage: 0,
     total: 0,
     list: [],

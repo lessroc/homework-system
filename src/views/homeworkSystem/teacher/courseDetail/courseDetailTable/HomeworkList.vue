@@ -24,10 +24,10 @@
   console.log('课程内容作业列表页面课程ID:', props.courseId);
 
   /**
-   * 打开作业详情页
+   * 打开课程作业列表页
    */
   const toHomeworkDetail = (record) => {
-    go('/teacher/homework-details/' + record.homeworkTopicId);
+    go('/teacher/homework-list/' + record.homeworkTopicId);
   };
 
   const columns = [

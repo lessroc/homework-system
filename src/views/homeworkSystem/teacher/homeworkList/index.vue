@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="作业详情页面">
+  <PageWrapper title="作业列表">
     <Table
       :columns="columns"
       :data-source="answerSheetList.list"
@@ -8,22 +8,65 @@
     >
       <template #bodyCell="{ text, record, column }">
         <template v-if="column.dataIndex === 'operation'">
-          <a @click="toHomeworkDetail(record)">{{ text }}</a>
+          <a @click="showDrawer(record)">{{ text }}</a>
         </template>
       </template>
     </Table>
     <Empty v-else />
+    <Drawer
+      v-model:visible="visible"
+      size="large"
+      class="custom-class"
+      title="作业详情"
+      placement="right"
+      @after-visible-change="afterVisibleChange"
+    >
+      <Detail
+        v-if="homeworkId"
+        @close-drawer="closeDrawer"
+        :homeworkId="homeworkId"
+        :score="score"
+      />
+    </Drawer>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
   import { useRoute } from 'vue-router';
   import { getHomeworkAnswerSheetListApi } from '/@/views/homeworkSystem/api/teacher';
-  import { onBeforeMount, reactive } from 'vue';
-  import { Table, Empty } from 'ant-design-vue';
+  import { onBeforeMount, reactive, ref } from 'vue';
+  import { Table, Empty, Drawer } from 'ant-design-vue';
   import dayjs from 'dayjs';
+  import Detail from './Detail.vue';
   const route = useRoute();
-  const homeworkId = route.params?.id ?? -1;
+  const homeworkTopicId = route.params?.id ?? -1;
+  const visible = ref<boolean>(false);
+  const homeworkId = ref<number>(0);
+  const score = ref<string>('');
+
+  const closeDrawer = () => {
+    console.log('子组件关闭');
+    visible.value = false;
+    homeworkId.value = 0;
+    score.value = '';
+    // 重新获取列表
+    getAnswerSheetList();
+  };
+
+  const afterVisibleChange = (bool: boolean) => {
+    console.log('visible', bool);
+    if (!bool) {
+      homeworkId.value = 0;
+      score.value = '';
+    }
+  };
+
+  const showDrawer = (record) => {
+    console.log('record', record);
+    homeworkId.value = record.homeworkId;
+    score.value = record.score;
+    visible.value = true;
+  };
 
   const columns = [
     {
@@ -43,6 +86,10 @@
       dataIndex: 'score',
     },
     {
+      title: '状态',
+      dataIndex: 'isCorrected',
+    },
+    {
       title: '操作',
       dataIndex: 'operation',
     },
@@ -59,7 +106,7 @@
   // 获取作业答卷列表
   const getAnswerSheetList = async () => {
     await getHomeworkAnswerSheetListApi({
-      homeworkTopicId: Number(homeworkId),
+      homeworkTopicId: Number(homeworkTopicId),
       pageNum: answerSheetList.pageNum,
       pageSize: answerSheetList.pageSize,
     })
@@ -67,6 +114,7 @@
         console.log('获取作业答卷列表成功:', res);
         res.list = res.list.map((item: any) => {
           item.operation = '查看';
+          item.isCorrected = item.isCorrected ? '已批改' : '待批改';
           item.commitTime = dayjs(item.commitTime).format('YYYY-MM-DD HH:mm:ss');
           return item;
         });

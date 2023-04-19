@@ -4,5 +4,5 @@ export default {
   admin: '我管理的课程',
 
   courseDetail: '课程详情',
-  homeworkDetail: '作业详情',
+  homeworkList: '作业列表',
 };

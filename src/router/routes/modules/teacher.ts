@@ -37,11 +37,11 @@ const teacher: AppRouteModule = {
       },
     },
     {
-      path: 'homework-details/:id',
-      name: 'HomeworkDetails',
-      component: () => import('/@/views/homeworkSystem/teacher/homeworkDetail/index.vue'),
+      path: 'homework-list/:id',
+      name: 'HomeworkList',
+      component: () => import('/@/views/homeworkSystem/teacher/homeworkList/index.vue'),
       meta: {
-        title: t('routes.homeworkSystem.homeworkDetail'),
+        title: t('routes.homeworkSystem.homeworkList'),
         icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },

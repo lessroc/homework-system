@@ -15,6 +15,7 @@
     <FormItem name="rangeTimePicker" label="开始时间和结束时间" v-bind="rangeConfig">
       <RangePicker
         v-model:value="formState.rangeTimePicker"
+        :ranges="ranges"
         show-time
         format="YYYY-MM-DD HH:mm:ss"
         value-format="YYYY-MM-DD HH:mm:ss"
@@ -29,10 +30,21 @@
   import { reactive, ref } from 'vue';
   import { Form, Input, Textarea, Button, RangePicker, message } from 'ant-design-vue';
   import { publishHomeworkApi } from '/@/views/homeworkSystem/api/teacher';
+  import dayjs, { Dayjs } from 'dayjs';
+  type RangeValue = [Dayjs, Dayjs];
   const FormItem = Form.Item;
   const props = defineProps<{ courseId: number }>();
 
   const loading = ref(false);
+  const ranges = reactive({
+    今天: [dayjs(), dayjs()] as RangeValue,
+    今天到月底: [dayjs(), dayjs().endOf('month')] as RangeValue,
+    一个月: [dayjs(), dayjs().add(1, 'month')] as RangeValue,
+    下个月: [
+      dayjs().add(1, 'month').startOf('month'),
+      dayjs().add(1, 'month').endOf('month'),
+    ] as RangeValue,
+  });
 
   interface FormState {
     title: string;

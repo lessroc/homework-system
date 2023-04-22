@@ -52,12 +52,7 @@
             </Popconfirm>
           </template>
           <template #extra>
-            <img
-              width="272"
-              style="border-radius: 5px"
-              alt="课程封面"
-              :src="globSetting.jobSys + item.coverUrl"
-            />
+            <img width="272" style="border-radius: 5px" alt="课程封面" :src="item.coverUrl" />
           </template>
           <ListItemMeta :description="item.courseDesc">
             <template #title>
@@ -103,12 +98,8 @@
   } from 'ant-design-vue';
   import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import {
-    createCourseMethod,
-    replaceCoverUrl,
-  } from '/@/views/homeworkSystem/utils/teacherMethods';
+  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
   import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
-  import { useGlobSetting } from '/@/hooks/setting';
   import {
     deleteCourseApi,
     editCourseApi,
@@ -159,7 +150,7 @@
     })
       .then((res) => {
         console.log('获取课程列表成功:', res);
-        res.list = replaceCoverUrl(res.list);
+        // res.list = replaceCoverUrl(res.list);
         delete res.pageNum;
         teacherCourseList = Object.assign(teacherCourseList, res);
       })
@@ -231,7 +222,7 @@
     showCCMB.value = true;
   };
 
-  const defaultCoverUrl = '/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
+  const defaultCoverUrl = 'http://342j6q8933.wicp.vip/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
 
   // 表单
   interface FormState {
@@ -301,10 +292,8 @@
     showCCMB.value = false;
     // formRef.value.resetFields();
   };
-
-  const globSetting = useGlobSetting();
   const setCoverUrl = (url: string) => {
-    formState.coverUrl = globSetting.jobSys + url;
+    formState.coverUrl = url;
   };
 </script>
 

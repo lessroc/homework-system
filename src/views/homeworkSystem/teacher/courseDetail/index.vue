@@ -17,17 +17,12 @@
   import { PageWrapper } from '/@/components/Page';
   import { getCourseDetailApi } from '/@/views/homeworkSystem/api/teacher';
   import CourseDetailTable from './courseDetailTable/index.vue';
-  import { useGlobSetting } from '/@/hooks/setting';
   import { useRoute } from 'vue-router';
-  const globSetting = useGlobSetting();
-  const basisUrl = globSetting.jobSys;
   const route = useRoute();
   const courseId = route.params?.id ?? -1;
   const getCourseDetail = async () => {
     await getCourseDetailApi({ courseId: Number(courseId) }).then((res) => {
       console.log('获取课程详情成功:', res);
-      res.coverUrl = res.coverUrl.replace('https://frp-any.top:32028', basisUrl);
-      res.coverUrl = /^\/static/.test(res.coverUrl) ? basisUrl + res.coverUrl : res.coverUrl;
       courseDetail.value = res;
     });
   };

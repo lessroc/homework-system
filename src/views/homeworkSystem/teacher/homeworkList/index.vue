@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="作业列表">
+  <PageWrapper title="答卷列表">
     <Table
       :columns="columns"
       :data-source="answerSheetList.list"
@@ -17,7 +17,7 @@
       v-model:visible="visible"
       size="large"
       class="custom-class"
-      title="作业详情"
+      title="答卷详情"
       placement="right"
       @after-visible-change="afterVisibleChange"
     >

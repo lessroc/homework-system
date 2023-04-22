@@ -5,7 +5,7 @@
     action="http://342j6q8933.wicp.vip/homework/uploadFile"
     @change="handleChange"
   >
-    <div class="uploadBtnBox" v-if="isDelete">
+    <div class="uploadBtnBox" v-if="newHomework">
       <Button>
         <upload-outlined />
         上传附件
@@ -29,7 +29,7 @@
             <div class="fileName">{{ file.name }}</div>
             <div class="fileSize">{{ file.fileSize }}</div>
           </div>
-          <div class="deleteBox" v-if="isDelete">
+          <div class="deleteBox" v-if="newHomework">
             <DeleteOutlined class="deleteIcon" @click="actions.remove" />
           </div>
         </div>
@@ -53,8 +53,9 @@
   import { reactive, ref } from 'vue';
   import type { UploadChangeParam } from 'ant-design-vue';
   import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
-  const props = defineProps<{ attachmentList; isDelete }>();
+  const props = defineProps<{ attachmentList; newHomework }>();
   console.log('旧的上传文件:', props.attachmentList);
+  console.log('是否可以删除:', props.newHomework);
   const oldFileList = reactive(initializeFileList(props.attachmentList));
   function initializeFileList(oldFileList) {
     return oldFileList.map((item, i) => {

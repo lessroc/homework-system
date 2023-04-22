@@ -42,7 +42,11 @@
           </a>
         </div>
       </template>-->
-      <UploadFiles :attachmentList="detail.attachmentList" :isDelete="newHomework" />
+      <UploadFiles
+        v-if="detail.attachmentList.length > 0 || newHomework"
+        :attachmentList="detail.attachmentList"
+        :newHomework="newHomework"
+      />
       <!--<template>
         <Empty description="暂无附件" />
       </template>-->

@@ -56,6 +56,53 @@ const transform: AxiosTransform = {
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
+      // 判断list中是否有coverUrl属性，如果有则将其开头为/^http.*\/static\//的部分替换为http://342j6q8933.wicp.vip/static/
+      if (result && result.list && result.list.length > 0) {
+        result.list.forEach((item: any) => {
+          if (item.coverUrl) {
+            item.coverUrl = item.coverUrl.replace(
+              /^http.*\/static\//,
+              'http://342j6q8933.wicp.vip/static/',
+            );
+            // item.coverUrl 开头是/static/的话，将其替换为http://342j6q8933.wicp.vip/static/
+            if (item.coverUrl.startsWith('/static/')) {
+              item.coverUrl = item.coverUrl.replace(
+                '/static/',
+                'http://342j6q8933.wicp.vip/static/',
+              );
+            }
+          }
+        });
+      }
+      // 判断result中是否有coverUrl属性，如果有则将/^http.*\/static\//的部分替换为http://342j6q8933.wicp.vip/static/
+      if (result && result.coverUrl) {
+        result.coverUrl = result.coverUrl.replace(
+          /^http.*\/static\//,
+          'http://342j6q8933.wicp.vip/static/',
+        );
+        // result.coverUrl 开头是/static/的话，将其替换为http://342j6q8933.wicp.vip/static/
+        if (result.coverUrl.startsWith('/static/')) {
+          result.coverUrl = result.coverUrl.replace(
+            '/static/',
+            'http://342j6q8933.wicp.vip/static/',
+          );
+        }
+      }
+      // 判断result是不是数组，如果是数组则遍历数组中的每一项，如果有fileUrl属性则将/^http.*\/static\//的部分替换为http://342j6q8933.wicp.vip/static/
+      if (result && Array.isArray(result)) {
+        result.forEach((item: any) => {
+          if (item.fileUrl) {
+            item.fileUrl = item.fileUrl.replace(
+              /^http.*\/static\//,
+              'http://342j6q8933.wicp.vip/static/',
+            );
+            // item.fileUrl 开头是/static/的话，将其替换为http://342j6q8933.wicp.vip/static/
+            if (item.fileUrl.startsWith('/static/')) {
+              item.fileUrl = item.fileUrl.replace('/static/', 'http://342j6q8933.wicp.vip/static/');
+            }
+          }
+        });
+      }
       return result;
     }
 

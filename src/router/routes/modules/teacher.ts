@@ -22,27 +22,24 @@ const teacher: AppRouteModule = {
       component: () => import('/@/views/homeworkSystem/teacher/index.vue'),
       meta: {
         title: t('routes.homeworkSystem.teacher'),
-        icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },
     },
     {
       path: 'course-detail/:id',
-      name: 'CourseDetail',
+      name: 'TeacherCourseDetail',
       component: () => import('/@/views/homeworkSystem/teacher/courseDetail/index.vue'),
       meta: {
         title: t('routes.homeworkSystem.courseDetail'),
-        icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },
     },
     {
       path: 'homework-list/:id',
-      name: 'HomeworkList',
+      name: 'TeacherHomeworkList',
       component: () => import('/@/views/homeworkSystem/teacher/homeworkList/index.vue'),
       meta: {
         title: t('routes.homeworkSystem.homeworkList'),
-        icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },
     },

@@ -27,13 +27,28 @@
   </Form>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
+  import { reactive, ref, watch } from 'vue';
   import { Form, Input, Textarea, Button, RangePicker, message } from 'ant-design-vue';
   import { publishHomeworkApi } from '/@/views/homeworkSystem/api/teacher';
   import dayjs, { Dayjs } from 'dayjs';
   type RangeValue = [Dayjs, Dayjs];
   const FormItem = Form.Item;
-  const props = defineProps<{ courseId: number }>();
+  const props = defineProps<{ courseId: number; homeworkData: any }>();
+
+  // 监听homeworkData变化
+  watch(
+    () => props.homeworkData,
+    (val) => {
+      console.log('homeworkData变化:', val);
+      if (val) {
+        formState.title = val.homeworkTopicTitle;
+        formState.desc = val.homeworkTopicDesc;
+        formState.rangeTimePicker = [val.startTime, val.endTime];
+        formState.homeworkTopicId = val.homeworkTopicId;
+      }
+    },
+    { deep: true },
+  );
 
   const loading = ref(false);
   const ranges = reactive({
@@ -50,6 +65,7 @@
     title: string;
     desc: string;
     rangeTimePicker: [string, string];
+    homeworkTopicId: number;
   }
   const title = {
     rules: [{ type: 'string' as const, required: true, message: '请输入作业标题！' }],
@@ -70,6 +86,7 @@
       desc: formState.desc,
       startTime: formState.rangeTimePicker[0],
       endTime: formState.rangeTimePicker[1],
+      homeworkTopicId: formState.homeworkTopicId,
     })
       .then((res) => {
         console.log('发布作业成功:', res);

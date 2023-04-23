@@ -2,26 +2,38 @@
   <Table
     :columns="columns"
     :data-source="homeworkList.list"
-    v-if="homeworkList.total > 0"
     :pagination="paginationProps"
+    :loading="loading"
   >
     <template #bodyCell="{ text, record, column }">
       <template v-if="column.dataIndex === 'operation'">
-        <a @click="toHomeworkDetail(record)">{{ text }}</a>
+        <Space>
+          <Button @click="toHomeworkDetail(record)">{{ text[0] }}</Button>
+          <Button type="primary" @click="toEditHomework(record)">{{ text[1] }}</Button>
+        </Space>
       </template>
     </template>
   </Table>
-  <Empty v-else />
 </template>
 <script lang="ts" setup>
-  import { Table, Empty } from 'ant-design-vue';
+  import { Table, Button, Space } from 'ant-design-vue';
   import { getHomeworkTopicListApi } from '/@/views/homeworkSystem/api/teacher';
-  import { onBeforeMount, reactive } from 'vue';
+  import { onBeforeMount, reactive, ref } from 'vue';
   import dayjs from 'dayjs';
   const props = defineProps<{ courseId: number }>();
+  const emit = defineEmits(['getHomeworkData']);
+  const loading = ref(false);
   import { useGo } from '/@/hooks/web/usePage';
   const go = useGo();
   console.log('课程内容作业列表页面课程ID:', props.courseId);
+
+  /**
+   * 切换到发布作业tab
+   */
+  const toEditHomework = (record) => {
+    console.log('编辑作业:', record);
+    emit('getHomeworkData', record);
+  };
 
   /**
    * 打开课程作业列表页
@@ -44,16 +56,19 @@
       title: '开始时间',
       dataIndex: 'startTime',
       width: 200,
+      align: 'center',
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       width: 200,
+      align: 'center',
     },
     {
       title: '操作',
       dataIndex: 'operation',
-      width: 100,
+      width: 250,
+      align: 'center',
     },
   ];
 
@@ -67,6 +82,7 @@
 
   // 获取作业列表
   const getHomeworkList = async () => {
+    loading.value = true;
     await getHomeworkTopicListApi({
       courseId: props.courseId,
       pageNum: homeworkList.pageNum,
@@ -75,7 +91,7 @@
       .then((res) => {
         console.log('获取作业列表成功:', res);
         res.list = res.list.map((item: any) => {
-          item.operation = '查看';
+          item.operation = ['查看答卷', '编辑作业'];
           item.startTime = dayjs(item.startTime).format('YYYY-MM-DD HH:mm:ss');
           item.endTime = dayjs(item.endTime).format('YYYY-MM-DD HH:mm:ss');
           return item;
@@ -89,6 +105,9 @@
       })
       .catch((err) => {
         console.log('获取作业列表失败:', err);
+      })
+      .finally(() => {
+        loading.value = false;
       });
   };
 

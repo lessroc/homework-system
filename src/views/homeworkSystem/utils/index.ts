@@ -34,3 +34,22 @@ export const isImg = (fileName) => {
   const suffix = getFileType(fileName);
   return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(suffix);
 };
+
+// 深度遍历result中的每一项
+// 如果属性类型是字符串则将字符串开头/^http.*\/static\//的部分替换为http://342j6q8933.wicp.vip/static/
+// 如果属性类型是字符串则将字符串开头/static/的部分替换为http://342j6q8933.wicp.vip/static/
+export const deepTraversal = (obj: any) => {
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const element = obj[key];
+      if (typeof element === 'string') {
+        obj[key] = element.replace(/^http.*\/static\//, 'http://342j6q8933.wicp.vip/static/');
+        if (element.startsWith('/static/')) {
+          obj[key] = element.replace('/static/', 'http://342j6q8933.wicp.vip/static/');
+        }
+      } else if (typeof element === 'object') {
+        deepTraversal(element);
+      }
+    }
+  }
+};

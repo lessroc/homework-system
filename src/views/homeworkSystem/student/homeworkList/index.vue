@@ -109,10 +109,8 @@
         console.log('获取我的作业答卷列表成功:', res);
         res.list = res.list.map((item: any) => {
           item.operation = '查看';
-          item.isCorrected = item.isCorrected ? '已批改' : '待批改';
           item.homeStartTime = dayjs(item.homeStartTime).format('YYYY-MM-DD HH:mm:ss');
           item.homeEndTime = dayjs(item.homeEndTime).format('YYYY-MM-DD HH:mm:ss');
-          item.state = item.state === 1 ? '草稿' : item.state === 2 ? '已提交' : '未提交';
           item.comprehensiveStatus = getHomeworkState(item);
           return item;
         });
@@ -135,15 +133,15 @@
     const now = dayjs();
     const startTime = dayjs(item.homeStartTime);
     const endTime = dayjs(item.homeEndTime);
-    if (now.isBefore(startTime)) {
+    if (item.state === 1) {
+      return '草稿';
+    } else if (now.isBefore(startTime)) {
       return '未开始';
     } else if (!item.homeworkId) {
       return '未提交';
     } else if (item.score) {
       if (!isNaN(item.score)) return item.score + ' 分'; // 如果是数字,则拼接得了多少分
       return item.score; // 已批改,直接显示
-    } else if (item.state === 1) {
-      return '草稿';
     } else if (item.state === 2) {
       return '待批阅'; // 已提交,未批改
     } else if (now.isAfter(endTime)) {

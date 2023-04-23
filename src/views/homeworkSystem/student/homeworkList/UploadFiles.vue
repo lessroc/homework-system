@@ -29,7 +29,7 @@
             <div class="fileName">{{ file.name }}</div>
             <div class="fileSize">{{ file.fileSize }}</div>
           </div>
-          <div class="deleteBox" v-if="newHomework">
+          <div class="deleteBox" v-if="newHomework || isADraft">
             <DeleteOutlined class="deleteIcon" @click="actions.remove" />
           </div>
         </div>
@@ -53,7 +53,8 @@
   import { reactive, ref } from 'vue';
   import type { UploadChangeParam } from 'ant-design-vue';
   import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
-  const props = defineProps<{ attachmentList; newHomework }>();
+  const props = defineProps<{ attachmentList; newHomework; isADraft }>();
+  const emit = defineEmits(['updateFileList']);
   console.log('旧的上传文件:', props.attachmentList);
   console.log('是否可以删除:', props.newHomework);
   const oldFileList = reactive(initializeFileList(props.attachmentList));
@@ -77,6 +78,8 @@
       console.log('newFile', newFile);
       fileList.value.pop();
       fileList.value.push(newFile);
+      // 上传成后传递给父组件
+      emit('updateFileList', fileList.value);
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} 文件上传成功`);
@@ -100,6 +103,7 @@
       isImg: isImg(item.name),
       thumbUrl: url,
       url,
+      staticUrl: item.response.result[0].fileUrl,
     };
   }
 

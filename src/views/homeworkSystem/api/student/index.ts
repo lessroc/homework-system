@@ -7,6 +7,8 @@ enum Api {
   joinCourse = '/course/join',
   leaveCourse = '/course/leave',
   studentHomeworkList = '/homework/studentHomeworkList',
+  commitHomework = '/homework/commit',
+  saveDraftHomework = '/homework/saveDraft',
 }
 
 /**
@@ -85,4 +87,44 @@ export function getStudentHomeworkListApi(params: {
     url: Api.studentHomeworkList,
     params,
   });
+}
+
+/**
+ * 提交作业
+ */
+export function commitHomeworkApi(params: {
+  attachmentList: string[];
+  content: string;
+  homeworkId: number;
+  homeworkTopicId: number;
+}) {
+  return homeworkHttp.post(
+    {
+      url: Api.commitHomework,
+      params,
+    },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
+}
+
+/**
+ * 保存草稿
+ */
+export function saveDraftHomeworkApi(params: {
+  attachmentList: string[];
+  content: string;
+  homeworkId: number;
+  homeworkTopicId: number;
+}) {
+  return homeworkHttp.post(
+    {
+      url: Api.saveDraftHomework,
+      params,
+    },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
 }

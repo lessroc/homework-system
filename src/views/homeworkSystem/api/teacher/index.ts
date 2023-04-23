@@ -19,6 +19,7 @@ enum Api {
   teacherHomeworkList = '/homework/teacherHomeworkList',
   homeworkDetail = '/homework/detail',
   homeworkCorrect = '/homework/correct',
+  courseStudentList = '/course/studentList',
 }
 
 /**
@@ -115,6 +116,7 @@ export function publishHomeworkApi(params: {
   desc: string;
   startTime: string;
   endTime: string;
+  homeworkTopicId: number;
 }) {
   return homeworkHttp.post({
     url: Api.homeworkPublish,
@@ -151,6 +153,20 @@ export function getHomeworkDetailApi(params) {
 export function correctHomeworkApi(params: { homeworkId: number; score: number }) {
   return homeworkHttp.post({
     url: Api.homeworkCorrect,
+    params,
+  });
+}
+
+/**
+ * 获取课程学生名单列表
+ */
+export function getCourseStudentListApi(params: {
+  courseId: number;
+  pageNum: number;
+  pageSize: number;
+}) {
+  return homeworkHttp.get({
+    url: Api.courseStudentList,
     params,
   });
 }

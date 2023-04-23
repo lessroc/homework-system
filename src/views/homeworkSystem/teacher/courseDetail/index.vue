@@ -1,9 +1,9 @@
 <template>
   <PageWrapper>
     <Card hoverable v-if="courseDetail.courseName" :style="{ cursor: 'default' }">
-      <template #cover>
+      <!--<template #cover>
         <img alt="example" :src="courseDetail.coverUrl" class="coverUrl" />
-      </template>
+      </template>-->
       <CardMeta :title="courseDetail.courseName">
         <template #description>{{ courseDetail.courseDesc }}</template>
       </CardMeta>

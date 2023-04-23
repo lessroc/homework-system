@@ -308,6 +308,6 @@
 
   .ant-pagination {
     margin-top: 16px;
-    text-align: center;
+    text-align: right;
   }
 </style>

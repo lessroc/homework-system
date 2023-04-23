@@ -3,8 +3,8 @@
     <Table
       :columns="columns"
       :data-source="answerSheetList.list"
-      v-if="answerSheetList.total > 0"
       :pagination="paginationProps"
+      :loading="loading"
     >
       <template #bodyCell="{ text, record, column }">
         <template v-if="column.dataIndex === 'operation'">
@@ -12,7 +12,6 @@
         </template>
       </template>
     </Table>
-    <Empty v-else />
     <Drawer
       v-model:visible="visible"
       size="large"
@@ -35,7 +34,7 @@
   import { useRoute } from 'vue-router';
   import { getHomeworkAnswerSheetListApi } from '/@/views/homeworkSystem/api/teacher';
   import { onBeforeMount, reactive, ref } from 'vue';
-  import { Table, Empty, Drawer } from 'ant-design-vue';
+  import { Table, Drawer } from 'ant-design-vue';
   import dayjs from 'dayjs';
   import Detail from './Detail.vue';
   const route = useRoute();
@@ -43,6 +42,7 @@
   const visible = ref<boolean>(false);
   const homeworkId = ref<number>(0);
   const score = ref<string>('');
+  const loading = ref<boolean>(false);
 
   const closeDrawer = () => {
     console.log('子组件关闭');
@@ -105,6 +105,7 @@
 
   // 获取作业答卷列表
   const getAnswerSheetList = async () => {
+    loading.value = true;
     await getHomeworkAnswerSheetListApi({
       homeworkTopicId: Number(homeworkTopicId),
       pageNum: answerSheetList.pageNum,
@@ -127,6 +128,9 @@
       })
       .catch((err) => {
         console.log('获取作业列表失败:', err);
+      })
+      .finally(() => {
+        loading.value = false;
       });
   };
 

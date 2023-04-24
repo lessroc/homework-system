@@ -58,6 +58,7 @@
     })
       .then((res) => {
         console.log('加入课程成功:', res);
+        message.success('加入课程成功');
         joinCourseSuccess.value = new Date().getTime();
       })
       .catch((err) => {

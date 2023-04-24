@@ -23,7 +23,7 @@
   </Table>
 </template>
 <script lang="ts" setup>
-  import { Table, Popconfirm, Button } from 'ant-design-vue';
+  import { Table, Popconfirm, Button, message } from 'ant-design-vue';
   import { getCourseStudentListApi } from '/@/views/homeworkSystem/api/teacher';
   import { onBeforeMount, reactive, ref, watch } from 'vue';
   import { leaveCourseApi } from '/@/views/homeworkSystem/api/student';
@@ -75,10 +75,12 @@
     })
       .then((res) => {
         console.log('移除学生成功:', res);
+        message.success('移除学生成功');
         getStudentList();
       })
       .catch((err) => {
         console.log('移除学生失败:', err);
+        message.error('移除学生失败');
       });
   };
 

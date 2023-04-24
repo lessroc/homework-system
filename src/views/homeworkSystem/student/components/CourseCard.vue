@@ -5,7 +5,7 @@
     @click="toCourseDetail(cardInfo.courseId)"
   >
     <template #cover>
-      <img style="height: calc(100vh / 4)" alt="example" :src="cardInfo.coverUrl" />
+      <img class="coverImg" alt="example" :src="cardInfo.coverUrl" />
     </template>
     <CardMeta :title="cardInfo.courseName" :description="`教师：${cardInfo.teacherName}`" />
     <template #actions>
@@ -68,3 +68,10 @@
       });
   };
 </script>
+<style lang="less" scoped>
+  .coverImg {
+    height: calc(100vh / 4);
+    width: 100%;
+    object-fit: cover;
+  }
+</style>

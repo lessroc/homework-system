@@ -20,18 +20,18 @@
           .setOptions({
             steps: [
               {
-                title: 'Welcome',
-                intro: 'Hello World! 👋',
+                title: '欢迎使用',
+                intro: '东莞理工作业系统 👋',
               },
               {
-                title: 'Collapse Button',
+                title: '折叠按钮',
                 element: document.querySelector(`.${prefixVar}-layout-header-trigger`)!,
-                intro: 'This is the menu collapse button.',
+                intro: '这是菜单折叠按钮',
               },
               {
-                title: 'User Action',
+                title: '用户功能区',
                 element: document.querySelector(`.${prefixVar}-layout-header-action`)!,
-                intro: 'This is the user function area.',
+                intro: '你可以在这里进行用户相关的操作',
               },
             ],
           })

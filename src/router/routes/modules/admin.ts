@@ -9,7 +9,6 @@ const teacher: AppRouteModule = {
   component: LAYOUT,
   redirect: '/admin',
   meta: {
-    hideChildrenInMenu: true,
     icon: 'simple-icons:about-dot-me',
     title: t('routes.homeworkSystem.admin'),
     orderNo: 40,
@@ -17,14 +16,30 @@ const teacher: AppRouteModule = {
   },
   children: [
     {
-      path: '',
-      name: 'AdminPage',
+      path: 'course-manage',
+      name: 'CourseManage',
       component: () => import('/@/views/homeworkSystem/admin/index.vue'),
       meta: {
-        title: t('routes.homeworkSystem.admin'),
-        icon: 'simple-icons:about-dot-me',
-        hideMenu: true,
+        title: t('routes.homeworkSystem.courseManage'),
       },
+    },
+    {
+      path: 'student-manage',
+      name: 'StudentManage',
+      component: () => import('/@/views/homeworkSystem/admin/UserManage.vue'),
+      meta: {
+        title: t('routes.homeworkSystem.studentManage'),
+      },
+      props: { userType: 1 },
+    },
+    {
+      path: 'teacher-manage',
+      name: 'TeacherManage',
+      component: () => import('/@/views/homeworkSystem/admin/UserManage.vue'),
+      meta: {
+        title: t('routes.homeworkSystem.teacherManage'),
+      },
+      props: { userType: 2 },
     },
   ],
 };

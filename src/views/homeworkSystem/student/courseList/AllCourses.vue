@@ -1,21 +1,20 @@
 <template>
-  <template v-if="list.length > 0">
+  <Spin :spinning="spinning">
     <div class="cardBox">
       <template v-for="(item, i) in list" :key="i">
         <CourseCard :cardInfo="item" :isAll="true" />
       </template>
     </div>
     <Pagination class="paginationComponent" @set-paging="setPaging" :get-paging="paging" />
-  </template>
-  <template v-else>
-    <div class="noData">暂无数据</div>
-  </template>
+  </Spin>
 </template>
 <script setup lang="ts">
   import CourseCard from '../components/CourseCard.vue';
   import Pagination from '../components/Pagination.vue';
-  import { onBeforeMount, reactive, watch } from 'vue';
+  import { Spin } from 'ant-design-vue';
+  import { onBeforeMount, reactive, ref, watch } from 'vue';
   import { getAllCourseListApi, searchCourseApi } from '/@/views/homeworkSystem/api/student';
+  const spinning = ref<boolean>(false);
   const props = defineProps<{ searchKeyword }>();
   console.log('子组件接收到的keyword:', props.searchKeyword);
   let list = reactive([]);
@@ -43,6 +42,7 @@
     },
   );
   const getSearchResult = async () => {
+    spinning.value = true;
     await searchCourseApi({
       keyword: props.searchKeyword.keyword,
       pageNum: paging.pageNum,
@@ -58,9 +58,13 @@
       })
       .catch((err) => {
         console.log('获取搜索结果失败:', err);
+      })
+      .finally(() => {
+        spinning.value = false;
       });
   };
   const getList = async () => {
+    spinning.value = true;
     await getAllCourseListApi({
       pageNum: paging.pageNum,
       pageSize: paging.pageSize,
@@ -74,6 +78,9 @@
       })
       .catch((err) => {
         console.log('获取所有课程列表失败:', err);
+      })
+      .finally(() => {
+        spinning.value = false;
       });
   };
   onBeforeMount(() => {

@@ -75,46 +75,56 @@
         height: 100%;
         overflow: hidden;
 
-        .cardBox {
-          // 网格布局
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          grid-gap: 16px;
-          padding: 16px;
-          height: calc(100% - 64px);
-          overflow-y: auto;
+        .ant-spin-nested-loading {
+          height: 100%;
+          overflow: hidden;
 
-          .ant-card {
-            height: fit-content;
+          .ant-spin-container {
+            height: 100%;
+            overflow: hidden;
 
-            .ant-card-body {
+            .cardBox {
+              // 网格布局
+              display: grid;
+              grid-template-columns: repeat(5, 1fr);
+              grid-gap: 16px;
               padding: 16px;
+              height: calc(100% - 64px);
+              overflow-y: auto;
 
-              .ant-card-meta-description {
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-              }
-            }
+              .ant-card {
+                height: fit-content;
 
-            .ant-card-actions {
-              & > li {
-                margin: 0;
+                .ant-card-body {
+                  padding: 16px;
 
-                .anticon-minus-circle,
-                .anticon-plus-circle {
-                  padding: 12px 0;
+                  .ant-card-meta-description {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                  }
+                }
+
+                .ant-card-actions {
+                  & > li {
+                    margin: 0;
+
+                    .anticon-minus-circle,
+                    .anticon-plus-circle {
+                      padding: 12px 0;
+                    }
+                  }
                 }
               }
             }
-          }
-        }
 
-        .paginationComponent {
-          // 占满一行
-          grid-column: 1 / -1;
-          text-align: right;
-          padding: 16px;
+            .paginationComponent {
+              // 占满一行
+              grid-column: 1 / -1;
+              text-align: right;
+              padding: 16px;
+            }
+          }
         }
       }
     }

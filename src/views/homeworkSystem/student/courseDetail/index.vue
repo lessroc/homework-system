@@ -1,30 +1,42 @@
 <template>
   <PageWrapper>
-    <Card hoverable v-if="courseDetail.courseName" :style="{ cursor: 'default' }">
-      <!--<template #cover>
-        <img alt="example" :src="courseDetail.coverUrl" class="coverUrl" />
-      </template>-->
-      <CardMeta :title="courseDetail.courseName">
-        <template #description>{{ courseDetail.courseDesc }}</template>
-      </CardMeta>
-      <HomeworkList :courseId="courseId" />
-    </Card>
+    <Spin :spinning="spinning">
+      <Card hoverable :style="{ cursor: 'default' }">
+        <!--<template #cover>
+          <img alt="example" :src="courseDetail.coverUrl" class="coverUrl" />
+        </template>-->
+        <CardMeta :title="courseDetail.courseName">
+          <template #description>{{ courseDetail.courseDesc }}</template>
+        </CardMeta>
+        <HomeworkList :courseId="courseId" />
+      </Card>
+    </Spin>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { Card, CardMeta } from 'ant-design-vue';
+  import { Spin, Card, CardMeta, message } from 'ant-design-vue';
   import { onBeforeMount, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { getCourseDetailApi } from '/@/views/homeworkSystem/api/teacher';
   import { useRoute } from 'vue-router';
   import HomeworkList from '../homeworkList/index.vue';
+  const spinning = ref(false);
   const route = useRoute();
   const courseId = route.params?.id ?? -1;
   const getCourseDetail = async () => {
-    await getCourseDetailApi({ courseId: Number(courseId) }).then((res) => {
-      console.log('获取课程详情成功:', res);
-      courseDetail.value = res;
-    });
+    spinning.value = true;
+    await getCourseDetailApi({ courseId: Number(courseId) })
+      .then((res) => {
+        console.log('获取课程详情成功:', res);
+        courseDetail.value = res;
+      })
+      .catch((err) => {
+        console.log('获取课程详情失败:', err);
+        message.error('获取课程详情失败');
+      })
+      .finally(() => {
+        spinning.value = false;
+      });
   };
 
   onBeforeMount(() => {

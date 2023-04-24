@@ -5,6 +5,7 @@
     :data-source="answerSheetList.list"
     v-if="answerSheetList.total > 0"
     :pagination="paginationProps"
+    :loading="loading"
   >
     <template #bodyCell="{ text, record, column }">
       <template v-if="column.dataIndex === 'operation'">
@@ -26,12 +27,13 @@
 </template>
 <script lang="ts" setup>
   import { onBeforeMount, reactive, ref } from 'vue';
-  import { Table, Empty, Drawer } from 'ant-design-vue';
+  import { Table, Empty, Drawer, message } from 'ant-design-vue';
   import dayjs from 'dayjs';
   import Detail from './Detail.vue';
   import { getStudentHomeworkListApi } from '/@/views/homeworkSystem/api/student';
   const visible = ref<boolean>(false);
   const homeworkId = ref<number>(0);
+  const loading = ref<boolean>(false);
   const props = defineProps<{ courseId }>();
   console.log('学生进入作业列表的课程ID:', props.courseId);
   let topicDetails = reactive({});
@@ -100,6 +102,7 @@
 
   // 获取作业答卷列表
   const getAnswerSheetList = async () => {
+    loading.value = true;
     await getStudentHomeworkListApi({
       courseId: Number(props.courseId),
       pageNum: answerSheetList.pageNum,
@@ -123,6 +126,10 @@
       })
       .catch((err) => {
         console.log('获取作业列表失败:', err);
+        message.error('获取作业列表失败');
+      })
+      .finally(() => {
+        loading.value = false;
       });
   };
 

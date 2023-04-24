@@ -1,23 +1,22 @@
 <template>
-  <template v-if="list.length > 0">
+  <Spin :spinning="spinning">
     <div class="cardBox">
       <template v-for="(item, i) in list" :key="i">
         <CourseCard :cardInfo="item" :isAll="false" />
       </template>
     </div>
     <Pagination class="paginationComponent" @set-paging="setPaging" :get-paging="paging" />
-  </template>
-  <template v-else>
-    <div class="noData">暂无数据</div>
-  </template>
+  </Spin>
 </template>
 <script setup lang="ts">
   import CourseCard from '../components/CourseCard.vue';
   import Pagination from '../components/Pagination.vue';
-  import { onBeforeMount, reactive } from 'vue';
+  import { Spin } from 'ant-design-vue';
+  import { onBeforeMount, reactive, ref } from 'vue';
   import { getStuCourseListApi } from '/@/views/homeworkSystem/api/student';
   import { useUserStore } from '/@/store/modules/user';
   const userStore = useUserStore();
+  const spinning = ref<boolean>(false);
   let list = reactive([]);
   let paging = reactive({
     pageNum: 1,
@@ -26,6 +25,7 @@
     total: 100,
   });
   const getList = async () => {
+    spinning.value = true;
     await getStuCourseListApi({
       pageNum: paging.pageNum,
       pageSize: paging.pageSize,
@@ -40,6 +40,9 @@
       })
       .catch((err) => {
         console.log('获取学生课程列表失败:', err);
+      })
+      .finally(() => {
+        spinning.value = false;
       });
   };
   onBeforeMount(() => {

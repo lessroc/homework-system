@@ -34,13 +34,24 @@ export const handleGetUserInfoData = (data: any) => {
     avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
     desc: setLoginRole(userType)[0].value,
     password: '123456',
-    homePath: '/dashboard/analysis',
+    homePath: setHomePath(userType),
     roles: setLoginRole(userType),
   };
 };
 
 /**
- * 根据用户类型设置登录角色
+ * 根据 userType 设置 homePath
+ */
+export const setHomePath = (userType: number) => {
+  return {
+    1: '/student',
+    2: '/teacher',
+    3: '/admin/course-manage',
+  }[userType];
+};
+
+/**
+ * 根据 userType 设置登录角色
  */
 export const setLoginRole = (userType: number) => {
   const role = {

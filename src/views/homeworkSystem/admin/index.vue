@@ -11,15 +11,21 @@
         <img :src="record.coverUrl" class="coverImg" alt="" />
       </template>
       <template v-if="column.dataIndex === 'operation'">
-        <Button @click="editCourse(record)">编辑课程</Button>
+        <Space>
+          <Button type="link" @click="editCourse(record)">编辑课程</Button>
+          <Popconfirm title="确定删除该课程？" @confirm="deleteCourse(record.courseId)">
+            <Button type="link">删除课程</Button>
+          </Popconfirm>
+        </Space>
       </template>
     </template>
   </Table>
 </template>
 <script lang="ts" setup>
-  import { Table, Button } from 'ant-design-vue';
+  import { Table, Button, Popconfirm, Space } from 'ant-design-vue';
   import { onBeforeMount, reactive, ref } from 'vue';
   import { getAllCourseListApi } from '/@/views/homeworkSystem/api/student';
+  import { deleteCourseApi } from '/@/views/homeworkSystem/api/teacher';
   const loading = ref<boolean>(false);
   const columns = [
     {
@@ -59,9 +65,21 @@
       title: '操作',
       dataIndex: 'operation',
       align: 'center',
-      width: 150,
+      width: 300,
     },
   ];
+
+  const deleteCourse = (courseId) => {
+    console.log('删除课程Id:', courseId);
+    deleteCourseApi({ courseId })
+      .then((res) => {
+        console.log('删除课程成功:', res);
+        getAllCoursesList();
+      })
+      .catch((err) => {
+        console.log('删除课程失败:', err);
+      });
+  };
 
   let allCoursesList = reactive({
     pageNum: 1,

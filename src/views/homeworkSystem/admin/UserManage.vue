@@ -30,6 +30,9 @@
           </span>
           <span v-else>
             <a @click="edit(record.id)">编辑</a>
+            <Popconfirm title="确定删除该用户？" @confirm="deleteUser(record.id)">
+              <a>删除</a>
+            </Popconfirm>
           </span>
         </div>
       </template>
@@ -40,8 +43,8 @@
   import { cloneDeep } from 'lodash-es';
   import { onBeforeMount, reactive, ref } from 'vue';
   import type { UnwrapRef } from 'vue';
-  import { Table, Input, TypographyLink, Popconfirm } from 'ant-design-vue';
-  import { getUserListApi } from '/@/views/homeworkSystem/api/admin';
+  import { Table, Input, TypographyLink, Popconfirm, message } from 'ant-design-vue';
+  import { deleteUserApi, getUserListApi } from '/@/views/homeworkSystem/api/admin';
   import dayjs from 'dayjs';
   const loading = ref<boolean>(false);
   const props = defineProps({
@@ -50,6 +53,19 @@
       default: 1,
     },
   });
+
+  const deleteUser = (id: number) => {
+    console.log('删除用户:', id);
+    deleteUserApi(id)
+      .then((res) => {
+        console.log('删除用户成功:', res);
+        message.success('删除用户成功');
+        getUserList();
+      })
+      .catch((err) => {
+        console.log('删除用户失败:', err);
+      });
+  };
 
   onBeforeMount(() => {
     getUserList();
@@ -157,7 +173,6 @@
   };
   const save = (id: number) => {
     Object.assign(userList.list.filter((item) => id === item.id)[0], editableData[id]);
-    console.log('editableData[id]:save:', editableData[id]);
     delete editableData[id];
   };
   const cancel = (id: number) => {

@@ -2,6 +2,21 @@ import { homeworkHttp } from '/@/utils/http/axios';
 
 enum Api {
   getUserList = '/admin/userList',
+  deleteUser = '/admin/user/detail/{userId}',
+}
+
+/**
+ * 删除用户
+ */
+export function deleteUserApi(id: number) {
+  return homeworkHttp.delete(
+    {
+      url: Api.deleteUser + `/${id}`,
+    },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
 }
 
 /**

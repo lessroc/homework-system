@@ -2,7 +2,7 @@ import { homeworkHttp } from '/@/utils/http/axios';
 
 enum Api {
   getUserList = '/admin/userList',
-  deleteUser = '/admin/user/detail/{userId}',
+  deleteUser = '/admin/user/detail',
 }
 
 /**

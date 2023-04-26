@@ -1,9 +1,6 @@
 import { ErrorMessageMode } from '/#/axios';
 import { homeworkHttp } from '/@/utils/http/axios';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
-interface UploadFileParams {
-  file: File;
-}
 interface UploadFileResultModel {
   code: number;
   result: object;
@@ -16,12 +13,13 @@ enum Api {
 /**
  * @description: upload file
  */
-export function uploadFileHomeworkApi(params: UploadFileParams, mode: ErrorMessageMode = 'modal') {
+export function uploadFileHomeworkApi(params, mode: ErrorMessageMode = 'modal') {
+  console.log('uploadFileHomeworkApi params:', params);
   return homeworkHttp.post<UploadFileResultModel>(
     {
       url: Api.UploadFile,
       params,
-      headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
     },
     {
       errorMessageMode: mode,

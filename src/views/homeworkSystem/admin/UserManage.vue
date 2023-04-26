@@ -179,8 +179,12 @@
     delete editableData[id];
   };
 </script>
-<style scoped>
+<style lang="less" scoped>
   .editable-row-operations a {
     margin-right: 8px;
+  }
+
+  :deep(.ant-pagination) {
+    margin-right: 16px;
   }
 </style>

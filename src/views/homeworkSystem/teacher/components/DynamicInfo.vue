@@ -91,18 +91,7 @@
   // import { dynamicInfoItems } from './data';
   // import { Icon } from '/@/components/Icon';
   import { onBeforeMount, ref, reactive, toRaw } from 'vue';
-  import {
-    Button,
-    Card,
-    List,
-    Modal,
-    Form,
-    FormItem,
-    Input,
-    Textarea,
-    Pagination,
-    Popconfirm,
-  } from 'ant-design-vue';
+  import { Button, Card, List, Modal, Form, Input, Pagination, Popconfirm } from 'ant-design-vue';
   import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
@@ -116,8 +105,10 @@
   import { useGo } from '/@/hooks/web/usePage';
   const go = useGo();
 
+  const FormItem = Form.Item;
   const ListItem = List.Item;
   const ListItemMeta = List.Item.Meta;
+  const Textarea = Input.TextArea;
 
   /**
    * 打开课程详情页

@@ -28,12 +28,13 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, watch } from 'vue';
-  import { Form, Input, Textarea, Button, RangePicker, message } from 'ant-design-vue';
+  import { Form, Input, Button, RangePicker, message } from 'ant-design-vue';
   import { publishHomeworkApi } from '/@/views/homeworkSystem/api/teacher';
   import dayjs, { Dayjs } from 'dayjs';
   type RangeValue = [Dayjs, Dayjs];
   const FormItem = Form.Item;
   const props = defineProps<{ courseId: number; homeworkData: any }>();
+  const Textarea = Input.TextArea;
 
   // 监听homeworkData变化
   watch(

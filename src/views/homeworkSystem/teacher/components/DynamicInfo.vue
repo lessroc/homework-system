@@ -64,7 +64,14 @@
         </ListItem>
       </template>
     </List>
-    <Modal v-model:visible="showCCMB" title="新建课程" centered @cancel="resetForm" @ok="onSubmit">
+    <Modal
+      v-model:visible="showCCMB"
+      title="新建课程"
+      centered
+      @cancel="resetForm"
+      @ok="onSubmit"
+      destroyOnClose
+    >
       <Form ref="formRef" :model="formState" :rules="rules" class="CCMBForm">
         <FormItem label="课程名称：" name="courseName">
           <Input v-model:value="formState.courseName" />
@@ -216,13 +223,13 @@
       formState = Object.assign(formState, {
         courseName: '',
         courseDesc: '',
-        coverUrl: defaultCoverUrl || '',
+        coverUrl: '',
       });
     }
     showCCMB.value = true;
   };
 
-  const defaultCoverUrl = 'http://342j6q8933.wicp.vip/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
+  // const defaultCoverUrl = 'http://342j6q8933.wicp.vip/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
 
   // 表单
   interface FormState {
@@ -234,7 +241,7 @@
   let formState = reactive<FormState>({
     courseName: '',
     courseDesc: '',
-    coverUrl: defaultCoverUrl || '',
+    coverUrl: '',
   });
   const rules = {
     courseName: [
@@ -278,7 +285,7 @@
           formState = Object.assign(formState, {
             courseName: '',
             courseDesc: '',
-            coverUrl: defaultCoverUrl || '',
+            coverUrl: '',
           });
           // 关闭模态框
           showCCMB.value = false;

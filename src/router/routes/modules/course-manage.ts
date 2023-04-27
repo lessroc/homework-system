@@ -13,7 +13,7 @@ const courseManage: AppRouteModule = {
     icon: 'simple-icons:amazonecs',
     title: t('routes.homeworkSystem.courseManage'),
     orderNo: 40,
-    // roles: ['admin', 'super'],
+    roles: ['admin', 'super'],
   },
   children: [
     {

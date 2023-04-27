@@ -13,7 +13,7 @@ const teacherManage: AppRouteModule = {
     icon: 'simple-icons:openaigym',
     title: t('routes.homeworkSystem.teacherManage'),
     orderNo: 40,
-    // roles: ['admin', 'super'],
+    roles: ['admin', 'super'],
   },
   children: [
     {

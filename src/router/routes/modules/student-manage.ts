@@ -13,7 +13,7 @@ const studentManage: AppRouteModule = {
     icon: 'simple-icons:laravel',
     title: t('routes.homeworkSystem.studentManage'),
     orderNo: 40,
-    // roles: ['admin', 'super'],
+    roles: ['admin', 'super'],
   },
   children: [
     {

@@ -13,7 +13,7 @@ const student: AppRouteModule = {
     icon: 'simple-icons:databricks',
     title: t('routes.homeworkSystem.student'),
     orderNo: 30,
-    // roles: ['student', 'super'],
+    roles: ['student', 'super'],
   },
   children: [
     {

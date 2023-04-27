@@ -69,8 +69,8 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '黄老师',
-    password: '123456',
+    account: '',
+    password: '',
   });
 
   const { validForm } = useFormValid(formRef);

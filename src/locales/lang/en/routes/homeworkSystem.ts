@@ -1,7 +1,6 @@
 export default {
-  teacher: 'Teacher',
-  student: 'Student',
-  admin: 'Workbench',
+  teacher: 'My Courses',
+  student: 'My Courses',
 
   courseDetail: 'Course Detail',
   homeworkList: 'Answer List',

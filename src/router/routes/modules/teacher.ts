@@ -10,7 +10,7 @@ const teacher: AppRouteModule = {
   redirect: '/teacher',
   meta: {
     hideChildrenInMenu: true,
-    icon: 'simple-icons:about-dot-me',
+    icon: 'simple-icons:databricks',
     title: t('routes.homeworkSystem.teacher'),
     orderNo: 20,
     // roles: ['teacher', 'super'],

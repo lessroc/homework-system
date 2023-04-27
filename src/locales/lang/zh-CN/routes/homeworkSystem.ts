@@ -1,7 +1,6 @@
 export default {
-  teacher: '我创建的课程',
-  student: '我加入的课程',
-  admin: '工作台',
+  teacher: '我的课程',
+  student: '我的课程',
 
   courseDetail: '课程详情',
   homeworkList: '答卷列表',

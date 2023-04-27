@@ -3,14 +3,14 @@ import type { AppRouteModule } from '/@/router/types';
 import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
-const teacher: AppRouteModule = {
+const student: AppRouteModule = {
   path: '/student',
   name: 'Student',
   component: LAYOUT,
   redirect: '/student',
   meta: {
     hideChildrenInMenu: true,
-    icon: 'simple-icons:about-dot-me',
+    icon: 'simple-icons:databricks',
     title: t('routes.homeworkSystem.student'),
     orderNo: 30,
     // roles: ['student', 'super'],
@@ -46,4 +46,4 @@ const teacher: AppRouteModule = {
   ],
 };
 
-export default teacher;
+export default student;

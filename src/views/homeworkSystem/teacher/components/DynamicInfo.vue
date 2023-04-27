@@ -1,5 +1,5 @@
 <template>
-  <Card title="课程列表" v-bind="$attrs">
+  <Card title="课程列表" v-bind="$attrs" class="courseContainer">
     <template #extra>
       <Button type="link" size="small" @click="showCreateCourseModalBox(true)">新建课程</Button>
     </template>
@@ -63,8 +63,20 @@
           <Textarea v-model:value="formState.courseDesc" />
         </FormItem>
         <FormItem label="课程封面：" name="coverUrl">
-          <!--传参给子组件-->
-          <UploadCourseCover :cover-url="formState.coverUrl" @set-cover-url="setCoverUrl" />
+          <Upload
+            class="avatar-uploader"
+            list-type="picture-card"
+            :show-upload-list="false"
+            :before-upload="beforeUploadImg"
+            :custom-request="customRequest"
+          >
+            <img :src="formState.coverUrl" :alt="formState.coverUrl" v-if="formState.coverUrl" />
+            <div v-else>
+              <LoadingOutlined v-if="loadingImg" />
+              <PlusOutlined v-else />
+              <div class="ant-upload-text">上传封面</div>
+            </div>
+          </Upload>
         </FormItem>
       </Form>
     </Modal>
@@ -72,11 +84,25 @@
 </template>
 <script lang="ts" setup>
   import { onBeforeMount, ref, reactive, toRaw } from 'vue';
-  import { Button, Card, List, Modal, Form, Input, Pagination, Popconfirm } from 'ant-design-vue';
-  import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+  import {
+    Button,
+    Card,
+    List,
+    Modal,
+    Form,
+    Input,
+    Pagination,
+    Popconfirm,
+    Upload,
+  } from 'ant-design-vue';
+  import {
+    FormOutlined,
+    DeleteOutlined,
+    LoadingOutlined,
+    PlusOutlined,
+  } from '@ant-design/icons-vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
-  import UploadCourseCover from '/@/views/homeworkSystem/teacher/components/UploadCourseCover.vue';
   import {
     deleteCourseApi,
     editCourseApi,
@@ -91,6 +117,24 @@
   const ListItemMeta = List.Item.Meta;
   const Textarea = Input.TextArea;
 
+  const loadingImg = ref(false);
+
+  const customRequest = ({ file, onSuccess, onError }) => {
+    loadingImg.value = true;
+    customUploadFile(file)
+      .then((res: any) => {
+        console.log('上传封面成功:', res);
+        formState.coverUrl = res[0].fileUrl;
+        onSuccess(res);
+      })
+      .catch((err) => {
+        console.log('上传封面失败:', err);
+        onError(err);
+      })
+      .finally(() => {
+        loadingImg.value = false;
+      });
+  };
   /**
    * 打开课程详情页
    */
@@ -107,13 +151,17 @@
 
   let teacherCourseList: GetCourseListResultParams = reactive({
     pageNum: 1,
-    pageSize: 3,
+    pageSize: 10,
     total: 0,
     totalPage: 0,
     list: [],
   });
 
   import { useUserStore } from '/@/store/modules/user';
+  import {
+    beforeUploadImg,
+    customUploadFile,
+  } from '/@/views/homeworkSystem/utils/customUploadFile';
   const userStore = useUserStore();
 
   // 加载中
@@ -124,7 +172,7 @@
     loading.value = true;
     getTeacherCourseListApi({
       pageNum,
-      pageSize: 3,
+      pageSize: 10,
       userId: userStore.getUserInfo?.userId,
     })
       .then((res) => {
@@ -271,12 +319,60 @@
     showCCMB.value = false;
     formRef.value.resetFields();
   };
-  const setCoverUrl = (url: string) => {
-    formState.coverUrl = url;
-  };
 </script>
 
 <style lang="less" scoped>
+  .courseContainer {
+    height: calc(100vh - 80px - 32px);
+    overflow: hidden;
+
+    & > :deep(.ant-card-head) {
+      height: 57px;
+    }
+
+    & > :deep(.ant-card-body) {
+      height: calc(100% - 57px);
+      overflow: hidden;
+      padding: 0;
+
+      .ant-list {
+        height: 100%;
+        overflow: hidden;
+
+        .ant-spin-nested-loading {
+          height: calc(100% - 64px);
+          overflow-y: auto;
+
+          .ant-list-item {
+            flex-direction: row-reverse;
+
+            .ant-list-item-main {
+              display: flex;
+              flex-direction: column;
+
+              .ant-list-item-action {
+                margin: 0;
+              }
+            }
+
+            .ant-list-item-extra {
+              margin-left: 0;
+              margin-right: 40px;
+            }
+          }
+        }
+
+        .ant-list-footer {
+          padding: 16px;
+
+          .ant-pagination {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
   .CCMBForm {
     padding: 16px;
   }
@@ -288,5 +384,15 @@
   .ant-pagination {
     margin-top: 16px;
     text-align: right;
+  }
+
+  :deep(.avatar-uploader) > .ant-upload {
+    width: 128px;
+    height: 128px;
+
+    .ant-upload-text {
+      margin-top: 8px;
+      color: #666;
+    }
   }
 </style>

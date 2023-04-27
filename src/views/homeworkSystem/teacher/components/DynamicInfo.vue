@@ -3,23 +3,6 @@
     <template #extra>
       <Button type="link" size="small" @click="showCreateCourseModalBox(true)">新建课程</Button>
     </template>
-    <!--<List item-layout="horizontal" :data-source="dynamicInfoItems">
-      <template #renderItem="{ item }">
-        <ListItem>
-          <ListItemMeta>
-            <template #description>
-              {{ item.date }}
-            </template>
-            &lt;!&ndash; eslint-disable-next-line &ndash;&gt;
-            <template #title> {{ item.courseName }} <span v-html="item.courseDesc"> </span> </template>
-            <template #avatar>
-              <Icon :icon="item.avatar" :size="30" />
-            </template>
-          </ListItemMeta>
-        </ListItem>
-      </template>
-    </List>-->
-    <!--OR-->
     <List
       item-layout="vertical"
       size="large"
@@ -88,8 +71,6 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  // import { dynamicInfoItems } from './data';
-  // import { Icon } from '/@/components/Icon';
   import { onBeforeMount, ref, reactive, toRaw } from 'vue';
   import { Button, Card, List, Modal, Form, Input, Pagination, Popconfirm } from 'ant-design-vue';
   import { FormOutlined, DeleteOutlined } from '@ant-design/icons-vue';
@@ -288,7 +269,7 @@
   };
   const resetForm = () => {
     showCCMB.value = false;
-    // formRef.value.resetFields();
+    formRef.value.resetFields();
   };
   const setCoverUrl = (url: string) => {
     formState.coverUrl = url;

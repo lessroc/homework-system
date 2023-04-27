@@ -32,7 +32,7 @@
                 </div>
                 <Upload
                   :show-upload-list="false"
-                  :before-upload="beforeUpload"
+                  :before-upload="beforeUploadImg"
                   :custom-request="customRequest"
                 >
                   <Button>更换封面</Button>
@@ -56,7 +56,11 @@
           <div class="editable-row-operations">
             <span v-if="editableData[record.courseId]">
               <TypographyLink @click="save(record.courseId)">保存</TypographyLink>
-              <Popconfirm title="确定取消？" @confirm="cancel(record.courseId)">
+              <Popconfirm
+                title="确定取消不保存？"
+                placement="topRight"
+                @confirm="cancel(record.courseId)"
+              >
                 <a>取消</a>
               </Popconfirm>
             </span>
@@ -112,7 +116,10 @@
   import { deleteCourseApi } from '/@/views/homeworkSystem/api/teacher';
   import { getAllCourseListApi } from '/@/views/homeworkSystem/api/student';
   import { adminEditCourseApi, getTeacherListApi } from '/@/views/homeworkSystem/api/admin';
-  import { uploadFileHomeworkApi } from '/@/views/homeworkSystem/api/sys/uploadFile';
+  import {
+    beforeUploadImg,
+    customUploadFile,
+  } from '/@/views/homeworkSystem/utils/customUploadFile';
   const loading = ref<boolean>(false);
   const visible = ref<boolean>(false);
   const selectedTeachers = reactive<any>({
@@ -123,22 +130,9 @@
   });
   const editField = ['coverUrl', 'courseName', 'courseDesc', 'teacherId', 'teacherName'];
 
-  const beforeUpload = (file) => {
-    const isJPG = file.type === 'image/jpeg';
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isJPG) {
-      message.error('上传封面只能是 JPG 格式!');
-    }
-    if (!isLt2M) {
-      message.error('上传封面大小不能超过 2MB!');
-    }
-    return isJPG && isLt2M;
-  };
   const customRequest = ({ file, onSuccess, onError }) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    uploadFileHomeworkApi(formData)
-      .then((res) => {
+    customUploadFile(file)
+      .then((res: any) => {
         console.log('上传封面成功:', res);
         editableData[selectedTeachers.currCourseId].coverUrl = res[0].fileUrl;
         onSuccess(res);
@@ -259,6 +253,7 @@
       title: '课程ID',
       dataIndex: 'courseId',
       align: 'center',
+      fixed: 'left',
       width: 80,
     },
     {
@@ -275,13 +270,13 @@
     {
       title: '课程描述',
       dataIndex: 'courseDesc',
-      width: 600,
+      width: 400,
     },
     {
       title: '教师ID',
       dataIndex: 'teacherId',
       align: 'center',
-      width: 80,
+      width: 120,
     },
     {
       title: '教师名称',
@@ -293,6 +288,7 @@
       title: '操作',
       dataIndex: 'operation',
       align: 'center',
+      fixed: 'right',
       width: 150,
     },
   ];

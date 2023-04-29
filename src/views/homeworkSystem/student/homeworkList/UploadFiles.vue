@@ -1,10 +1,5 @@
 <template>
-  <Upload
-    v-model:file-list="fileList"
-    name="file"
-    action="http://342j6q8933.wicp.vip/homework/uploadFile"
-    @change="handleChange"
-  >
+  <Upload v-model:file-list="fileList" name="file" :action="uploadUrl" @change="handleChange">
     <div class="uploadBtnBox" v-if="newHomework">
       <Button>
         <upload-outlined />
@@ -53,6 +48,9 @@
   import { reactive, ref } from 'vue';
   import type { UploadChangeParam } from 'ant-design-vue';
   import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
+  import { useGlobSetting } from '/@/hooks/setting';
+  const globSetting = useGlobSetting();
+  const uploadUrl = globSetting.uploadUrl + '/homework/uploadFile';
   const props = defineProps<{ attachmentList; newHomework; isADraft }>();
   const emit = defineEmits(['updateFileList']);
   console.log('旧的上传文件:', props.attachmentList);
@@ -111,7 +109,7 @@
   function getFileUrl(status, response) {
     console.log('getFileUrl', status, response);
     if (status === 'done') {
-      return import.meta.env.VITE_GLOB_API_JOB_SYS_URL + response.result[0].fileUrl;
+      return globSetting.jobSys + response.result[0].fileUrl;
     }
     return '';
   }

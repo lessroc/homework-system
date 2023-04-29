@@ -39,7 +39,7 @@
    * 打开课程作业列表页
    */
   const toHomeworkDetail = (record) => {
-    go('/teacher/homework-list/' + record.homeworkTopicId);
+    go('/dashboard/homework-list/' + record.homeworkTopicId);
   };
 
   const columns = [

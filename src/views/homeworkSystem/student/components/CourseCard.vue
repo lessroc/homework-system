@@ -31,7 +31,7 @@
    */
   const toCourseDetail = (courseId) => {
     if (props.isAll) return;
-    go('/student/course-detail/' + courseId);
+    go('/dashboard/course-detail/' + courseId);
   };
   const userStore = useUserStore();
   const props = defineProps<{ cardInfo: any; isAll: boolean }>();

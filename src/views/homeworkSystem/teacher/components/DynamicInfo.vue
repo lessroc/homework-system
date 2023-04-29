@@ -140,8 +140,7 @@
    */
   const toCourseDetail = (courseId: number) => {
     console.log('打开课程详情页:', courseId);
-    // go({ name: 'courseDetail', params: { courseId } });
-    go('/teacher/course-detail/' + courseId);
+    go('/dashboard/course-detail/' + courseId);
   };
 
   // 挂载前获取课程列表

@@ -63,9 +63,9 @@ export default {
     signUpFormTitle: 'Sign up',
     forgetFormTitle: 'Reset password',
 
-    signInTitle: 'Backstage management system',
-    signInDesc: 'Enter your personal details and get started!',
-    policy: 'I agree to the xxx Privacy Policy',
+    signInTitle: 'Convenient and efficient homework management system',
+    signInDesc: 'Welcome!',
+    policy: 'I agree to the homework system Privacy Policy',
     scanSign: `scanning the code to complete the login`,
 
     loginButton: 'Sign in',

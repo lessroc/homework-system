@@ -101,15 +101,21 @@
     LoadingOutlined,
     PlusOutlined,
   } from '@ant-design/icons-vue';
-  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
   import {
     deleteCourseApi,
     editCourseApi,
     getTeacherCourseListApi,
   } from '/@/views/homeworkSystem/api/teacher';
+  import {
+    beforeUploadImg,
+    customUploadFile,
+  } from '/@/views/homeworkSystem/utils/customUploadFile';
+  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
+  import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
   import { useGo } from '/@/hooks/web/usePage';
+  import { useUserStore } from '/@/store/modules/user';
+  const userStore = useUserStore();
   const go = useGo();
 
   const FormItem = Form.Item;
@@ -155,13 +161,6 @@
     totalPage: 0,
     list: [],
   });
-
-  import { useUserStore } from '/@/store/modules/user';
-  import {
-    beforeUploadImg,
-    customUploadFile,
-  } from '/@/views/homeworkSystem/utils/customUploadFile';
-  const userStore = useUserStore();
 
   // 加载中
   let loading = ref<boolean>(false);

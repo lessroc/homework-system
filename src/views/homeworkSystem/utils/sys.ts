@@ -46,7 +46,7 @@ export const setHomePath = (userType: number) => {
   return {
     1: '/student',
     2: '/teacher',
-    3: '/admin/course-manage',
+    3: '/course-manage',
   }[userType];
 };
 

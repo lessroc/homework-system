@@ -4,10 +4,10 @@ import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
 const teacher: AppRouteModule = {
-  path: '/teacher',
+  path: '/dashboard',
   name: 'Teacher',
   component: LAYOUT,
-  redirect: '/teacher',
+  redirect: '/dashboard',
   meta: {
     hideChildrenInMenu: true,
     icon: 'simple-icons:databricks',

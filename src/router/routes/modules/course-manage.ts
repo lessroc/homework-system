@@ -7,7 +7,7 @@ const courseManage: AppRouteModule = {
   path: '/',
   name: 'CourseManage',
   component: LAYOUT,
-  redirect: '/course-manage',
+  redirect: '/dashboard',
   meta: {
     hideChildrenInMenu: true,
     icon: 'simple-icons:amazonecs',

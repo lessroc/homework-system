@@ -281,6 +281,23 @@ export const homeworkHttp = createAxios({
     joinTime: false,
   },
 });
+/**
+ * 作业系统上传文件
+ */
+export const homeworkUploadHttp = createAxios({
+  requestOptions: {
+    // mock 接口地址
+    // apiUrl: 'http://127.0.0.1:4523/m1/2485078-0-default',
+    // 正式环境 接口地址
+    apiUrl: globSetting.uploadUrl,
+    // 接口拼接地址
+    // urlPrefix: urlPrefix,
+    // 需要对返回数据进行处理
+    isTransformResponse: true,
+    //  是否加入时间戳
+    joinTime: false,
+  },
+});
 
 // other api url
 // export const otherHttp = createAxios({

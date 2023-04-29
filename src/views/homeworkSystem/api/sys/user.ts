@@ -16,6 +16,28 @@ enum Api {
   Register = '/user/register',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
+  EditUserName = '/user/edit',
+  EditPassword = '/user/editPassword',
+}
+
+/**
+ * 修改密码
+ */
+export function editPasswordHomeworkApi(params: any) {
+  return homeworkHttp.post({
+    url: Api.EditPassword,
+    params,
+  });
+}
+
+/**
+ * 修改用户名
+ */
+export function editUserNameHomeworkApi(params: any) {
+  return homeworkHttp.post({
+    url: Api.EditUserName,
+    params,
+  });
 }
 
 /**

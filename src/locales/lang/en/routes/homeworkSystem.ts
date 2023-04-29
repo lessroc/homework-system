@@ -8,4 +8,6 @@ export default {
   courseManage: 'Course Manage',
   teacherManage: 'Teacher Manage',
   studentManage: 'Student Manage',
+
+  userInfo: 'User Info',
 };

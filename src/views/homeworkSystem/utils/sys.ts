@@ -29,6 +29,7 @@ export const handleGetUserInfoData = (data: any) => {
   return {
     token,
     userId,
+    userType,
     username: userName,
     realName: userName,
     avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',

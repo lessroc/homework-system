@@ -8,4 +8,6 @@ export default {
   courseManage: '课程管理',
   teacherManage: '教师管理',
   studentManage: '学生管理',
+
+  userInfo: '个人信息',
 };

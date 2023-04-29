@@ -265,7 +265,7 @@
   const rules = {
     courseName: [
       { required: true, message: '请输入课程名称', trigger: 'blur' },
-      { min: 2, max: 5, message: '长度应为 2 至 5', trigger: 'blur' },
+      { min: 2, max: 20, message: '长度应为 2 至 20', trigger: 'blur' },
     ],
     courseDesc: [{ required: true, message: '请输入课程描述', trigger: 'blur' }],
     coverUrl: [{ required: true, message: '请上传课程封面', trigger: 'blur' }],

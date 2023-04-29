@@ -4,7 +4,7 @@ import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
 const courseManage: AppRouteModule = {
-  path: '/',
+  path: '/dashboard',
   name: 'CourseManage',
   component: LAYOUT,
   redirect: '/dashboard',
@@ -17,7 +17,7 @@ const courseManage: AppRouteModule = {
   },
   children: [
     {
-      path: 'course-manage',
+      path: '',
       name: 'CourseManagePage',
       component: () => import('/@/views/homeworkSystem/admin/index.vue'),
       meta: {

@@ -1,9 +1,7 @@
 <template>
   <Spin :spinning="spinning">
     <Typography>
-      <TypographyTitle>{{
-        detail.homeworkTopicTitle + '|' + detail.homeworkTopicId
-      }}</TypographyTitle>
+      <TypographyTitle>{{ detail.homeworkTopicTitle }}</TypographyTitle>
       <TypographyParagraph>描述：{{ detail.homeworkTopicDesc }}</TypographyParagraph>
       <template v-if="newHomework || detail.state === 1">
         <TypographyParagraph>

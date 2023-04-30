@@ -1,7 +1,10 @@
 <template v-if="homeworkId">
   <Spin :spinning="spinning">
     <Typography>
-      <TypographyTitle>{{ detail.homeworkTopicTitle + '|' + detail.homeworkId }}</TypographyTitle>
+      <TypographyTitle>{{ detail.homeworkTopicTitle }}</TypographyTitle>
+      <TypographyParagraph>
+        状态：<Tag color="#2db7f5">{{ isCorrected }}</Tag>
+      </TypographyParagraph>
       <TypographyParagraph>描述：{{ detail.homeworkTopicDesc }}</TypographyParagraph>
       <TypographyParagraph>内容：{{ detail.content }}</TypographyParagraph>
       <template v-if="detail.attachmentList.length > 0">
@@ -52,6 +55,7 @@
     TypographyParagraph,
     Divider,
     message,
+    Tag,
   } from 'ant-design-vue';
   import {
     FileExcelOutlined,
@@ -65,9 +69,12 @@
   } from '@ant-design/icons-vue';
   import { computed, onBeforeMount, reactive, ref } from 'vue';
   import { correctHomeworkApi, getHomeworkDetailApi } from '/@/views/homeworkSystem/api/teacher';
-  const props = defineProps<{ homeworkId: number; score: string }>();
+  import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
+  const props = defineProps<{ homeworkId: number; score: string | null; isCorrected: string }>();
   const emit = defineEmits(['closeDrawer']);
-  console.log('作业ID:', props.homeworkId);
+  console.log('来自父页面的作业ID:', props.homeworkId);
+  console.log('来自父页面的作业评分:', props.score);
+  console.log('来自父页面的作业状态:', props.isCorrected);
   const spinning = ref<boolean>(false);
   let detail = reactive({
     homeworkTopicTitle: '',
@@ -79,13 +86,15 @@
     homeworkTopicId: 0,
     teacherId: 0,
     teacherName: '',
+    comprehensiveStatus: '',
   });
-  const score = ref<string>(props.score);
+  const score = ref<string | null>(props.score);
   const scoreDivider = computed(() => {
-    return props.score === '' ? '评分' : '修改评分';
+    console.log('scoreDivider:', props.score);
+    return props.score ? '修改评分' : '评分';
   });
   const submitOrModify = computed(() => {
-    return props.score === '' ? '提交' : '修改';
+    return props.score ? '修改' : '提交';
   });
   const loading = ref<boolean>(false);
   // 提交评分
@@ -116,52 +125,19 @@
     spinning.value = true;
     await getHomeworkDetailApi(props.homeworkId)
       .then((res) => {
-        console.log('作业详情:', res);
-        const url = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
-        const imgList = ['jpg', 'png', 'gif', 'jpeg', 'webp'];
-        res.attachmentList = res.attachmentList.map((item) => {
+        console.log('老师获取作业详情成功:', res);
+        res.attachmentList.forEach((item) => {
           item.fileSize = `附件大小：${getFileSize(item.fileSize)}`;
-          item.fileUrl = url;
           item.fileSuffix = getFileType(item.fileName);
-          item.isImg = imgList.includes(item.fileSuffix);
-          return item;
+          item.isImg = isImg(item.fileName);
         });
+        console.log('处理后的作业详情:', res);
         detail = Object.assign(detail, res);
       })
       .catch((err) => {
-        console.log('作业详情:', err);
+        console.log('获取作业详情出现异常:', err);
       });
     spinning.value = false;
-  };
-  // 获取文件后缀名
-  const getFileType = (fileName) => {
-    const index = fileName.lastIndexOf('.');
-    // 将后缀名转为小写
-    const suffix = fileName.substring(index + 1).toLowerCase();
-    // txt 转为 text, md 转为 markdown
-    if (suffix === 'txt') {
-      return 'text';
-    } else if (suffix === 'md') {
-      return 'markdown';
-    }
-    // 如果没有后缀名，返回 unknown
-    if (index < 0) {
-      return 'unknown';
-    } else {
-      return suffix;
-    }
-  };
-  // 将文件大小转换为KB、MB、GB
-  const getFileSize = (fileSize) => {
-    if (fileSize < 1024) {
-      return fileSize + 'B';
-    } else if (fileSize < 1024 * 1024) {
-      return (fileSize / 1024).toFixed(2) + 'KB';
-    } else if (fileSize < 1024 * 1024 * 1024) {
-      return (fileSize / 1024 / 1024).toFixed(2) + 'MB';
-    } else {
-      return (fileSize / 1024 / 1024 / 1024).toFixed(2) + 'GB';
-    }
   };
   onBeforeMount(() => {
     getHomeworkDetail();

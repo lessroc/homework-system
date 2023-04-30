@@ -110,6 +110,7 @@
     })
       .then((res) => {
         console.log('获取我的作业答卷列表成功:', res);
+        // todo 缺少作业描述 homeworkTopicDesc
         res.list = res.list.map((item: any) => {
           item.operation = '查看';
           item.homeStartTime = dayjs(item.homeStartTime).format('YYYY-MM-DD HH:mm:ss');

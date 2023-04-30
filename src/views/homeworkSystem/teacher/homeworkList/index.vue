@@ -25,6 +25,7 @@
         @close-drawer="closeDrawer"
         :homeworkId="homeworkId"
         :score="score"
+        :isCorrected="isCorrected"
       />
     </Drawer>
   </PageWrapper>
@@ -42,6 +43,7 @@
   const visible = ref<boolean>(false);
   const homeworkId = ref<number>(0);
   const score = ref<string>('');
+  const isCorrected = ref<string>('');
   const loading = ref<boolean>(false);
 
   const closeDrawer = () => {
@@ -65,6 +67,7 @@
     console.log('record', record);
     homeworkId.value = record.homeworkId;
     score.value = record.score;
+    isCorrected.value = record.isCorrected;
     visible.value = true;
   };
 

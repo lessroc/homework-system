@@ -5,7 +5,7 @@
       <TypographyParagraph>描述：{{ detail.homeworkTopicDesc }}</TypographyParagraph>
       <template v-if="newHomework || detail.state === 1">
         <TypographyParagraph>
-          <a-textarea v-model:value="detail.content" placeholder="请输入作业内容" allow-clear />
+          <TextArea v-model:value="detail.content" placeholder="请输入作业内容" allow-clear />
         </TypographyParagraph>
       </template>
       <template v-else>
@@ -40,12 +40,14 @@
     Space,
     Button,
     message,
+    Input,
   } from 'ant-design-vue';
   import { computed, onBeforeMount, reactive, ref } from 'vue';
   import { getHomeworkDetailApi } from '/@/views/homeworkSystem/api/teacher';
   import UploadFiles from './UploadFiles.vue';
   import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
   import { commitHomeworkApi, saveDraftHomeworkApi } from '/@/views/homeworkSystem/api/student';
+  const { TextArea } = Input;
   const props = defineProps<{ topicDetails }>();
   const emit = defineEmits(['closeDrawer']);
   console.log('作业详情抽屉:', props.topicDetails);

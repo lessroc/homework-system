@@ -1,3 +1,7 @@
+import { useGlobSetting } from '/@/hooks/setting';
+const globSetting = useGlobSetting();
+const basicUrl = globSetting.jobSys;
+
 // 获取文件后缀名
 export const getFileType = (fileName) => {
   const index = fileName.lastIndexOf('.');
@@ -43,9 +47,9 @@ export const deepTraversal = (obj: any) => {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const element = obj[key];
       if (typeof element === 'string') {
-        obj[key] = element.replace(/^http.*\/static\//, 'http://342j6q8933.wicp.vip/static/');
+        obj[key] = element.replace(/^http.*\/static\//, `${basicUrl}/static/`);
         if (element.startsWith('/static/')) {
-          obj[key] = element.replace('/static/', 'http://342j6q8933.wicp.vip/static/');
+          obj[key] = element.replace('/static/', `${basicUrl}/static/`);
         }
       } else if (typeof element === 'object') {
         deepTraversal(element);

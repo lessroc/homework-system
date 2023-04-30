@@ -47,6 +47,7 @@
   import UploadFiles from './UploadFiles.vue';
   import { getFileSize, getFileType, isImg } from '/@/views/homeworkSystem/utils';
   import { commitHomeworkApi, saveDraftHomeworkApi } from '/@/views/homeworkSystem/api/student';
+  import dayjs from 'dayjs';
   const { TextArea } = Input;
   const props = defineProps<{ topicDetails }>();
   const emit = defineEmits(['closeDrawer']);
@@ -71,6 +72,8 @@
     teacherId: props.topicDetails.teacherId,
     teacherName: props.topicDetails.teacherName,
     comprehensiveStatus: props.topicDetails.comprehensiveStatus,
+    homeStartTime: props.topicDetails.homeStartTime,
+    homeEndTime: props.topicDetails.homeEndTime,
   });
   // 提交作业
   const submit = async (state) => {
@@ -81,13 +84,14 @@
       homeworkId: detail.homeworkId,
       homeworkTopicId: detail.homeworkTopicId,
     };
+    const now = dayjs();
     console.log(`提交${stateStr}数据:`, detail);
     // 判断作业是否未开始或者已截止
-    if (detail.comprehensiveStatus === '未开始' && state !== 1) {
-      message.error('作业未开始, 不能提交，可以先保存为草稿');
+    if (now.isBefore(detail.homeStartTime)) {
+      message.error('作业未开始，不能提交，可以先保存为草稿');
       return;
-    } else if (detail.comprehensiveStatus === '已结束' && state !== 1) {
-      message.error('作业已截止, 不能提交，可以先保存为草稿，再联系老师延长截止时间');
+    } else if (now.isAfter(detail.homeEndTime)) {
+      message.error('作业已截止，不能提交，可以先保存为草稿，再联系老师延长截止时间');
       return;
     } else if (!submitData.content && submitData.attachmentList.length === 0) {
       // 检测是否有内容或附件, 没有则提示提交内容不能为空

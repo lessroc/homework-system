@@ -4,24 +4,30 @@ const basicUrl = globSetting.jobSys;
 
 // 获取文件后缀名
 export const getFileType = (fileName) => {
-  const index = fileName.lastIndexOf('.');
-  // 将后缀名转为小写
-  const suffix = fileName.substring(index + 1).toLowerCase();
-  // txt 转为 text, md 转为 markdown
-  if (suffix === 'txt') {
-    return 'text';
-  } else if (suffix === 'md') {
-    return 'markdown';
-  }
-  // 如果没有后缀名，返回 unknown
-  if (index < 0) {
+  try {
+    const index = fileName.lastIndexOf('.');
+    // 将后缀名转为小写
+    const suffix = fileName.substring(index + 1).toLowerCase();
+    // txt 转为 text, md 转为 markdown
+    if (suffix === 'txt') {
+      return 'text';
+    } else if (suffix === 'md') {
+      return 'markdown';
+    }
+    // 如果没有后缀名，返回 unknown
+    if (index < 0) {
+      return 'unknown';
+    } else {
+      return suffix;
+    }
+  } catch (err) {
+    console.log('获取文件后缀名失败:', err);
     return 'unknown';
-  } else {
-    return suffix;
   }
 };
 // 将文件大小转换为KB、MB、GB
 export const getFileSize = (fileSize) => {
+  if (!/^\d+(\.\d+)?$/.test(fileSize)) return '0B';
   if (fileSize < 1024) {
     return fileSize + 'B';
   } else if (fileSize < 1024 * 1024) {

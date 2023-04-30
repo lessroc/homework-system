@@ -2,8 +2,13 @@
   <Spin :spinning="spinning">
     <Typography>
       <TypographyTitle>{{ detail.homeworkTopicTitle }}</TypographyTitle>
-      <TypographyParagraph>描述：{{ detail.homeworkTopicDesc }}</TypographyParagraph>
-      <template v-if="newHomework || detail.state === 1">
+      <TypographyParagraph>
+        状态：<Tag color="#2db7f5">{{ topicDetails.comprehensiveStatus }}</Tag>
+      </TypographyParagraph>
+      <TypographyParagraph v-if="detail.homeworkTopicDesc">
+        描述：{{ detail.homeworkTopicDesc }}
+      </TypographyParagraph>
+      <template v-if="newHomework || isADraft">
         <TypographyParagraph>
           <TextArea v-model:value="detail.content" placeholder="请输入作业内容" allow-clear />
         </TypographyParagraph>
@@ -13,14 +18,14 @@
       </template>
       <Divider>{{ newHomework ? '上传附件' : '附件' }}</Divider>
       <UploadFiles
-        v-if="detail.attachmentList.length > 0 || newHomework"
+        v-if="detail.attachmentList.length > 0 || newHomework || isADraft"
         :attachmentList="detail.attachmentList"
         :newHomework="newHomework"
         :isADraft="isADraft"
         @update-file-list="updateFileList"
       />
       <Empty description="暂无附件" v-else />
-      <div class="text-right" v-if="newHomework || detail.state === 1">
+      <div class="text-right" v-if="newHomework || isADraft">
         <Space>
           <Button @click="submit(1)">存草稿</Button>
           <Button type="primary" @click="submit(2)">提交</Button>
@@ -41,6 +46,7 @@
     Button,
     message,
     Input,
+    Tag,
   } from 'ant-design-vue';
   import { computed, onBeforeMount, reactive, ref } from 'vue';
   import { getHomeworkDetailApi } from '/@/views/homeworkSystem/api/teacher';
@@ -56,24 +62,19 @@
   const newHomework = computed(() => {
     return !props.topicDetails.homeworkId;
   });
-  const isADraft = computed(() => {
-    return props.topicDetails.state === 1;
-  });
+  const isADraft = ref<boolean>(false);
   console.log('是否是新建作业:', newHomework.value);
   const spinning = ref<boolean>(false);
   let detail = reactive({
-    homeworkTopicTitle: props.topicDetails.homeworkTopicTitle,
-    homeworkTopicDesc: '',
-    content: '',
     attachmentList: [],
-    state: props.topicDetails.state,
     homeworkId: props.topicDetails.homeworkId,
+    homeworkTopicDesc: '',
     homeworkTopicId: props.topicDetails.homeworkTopicId,
+    homeworkTopicTitle: props.topicDetails.homeworkTopicTitle,
+    content: '',
+    state: props.topicDetails.state,
     teacherId: props.topicDetails.teacherId,
     teacherName: props.topicDetails.teacherName,
-    comprehensiveStatus: props.topicDetails.comprehensiveStatus,
-    homeStartTime: props.topicDetails.homeStartTime,
-    homeEndTime: props.topicDetails.homeEndTime,
   });
   // 提交作业
   const submit = async (state) => {
@@ -87,10 +88,10 @@
     const now = dayjs();
     console.log(`提交${stateStr}数据:`, detail);
     // 判断作业是否未开始或者已截止
-    if (now.isBefore(detail.homeStartTime)) {
+    if (now.isBefore(props.topicDetails.homeStartTime) && state === 2) {
       message.error('作业未开始，不能提交，可以先保存为草稿');
       return;
-    } else if (now.isAfter(detail.homeEndTime)) {
+    } else if (now.isAfter(props.topicDetails.homeEndTime) && state === 2) {
       message.error('作业已截止，不能提交，可以先保存为草稿，再联系老师延长截止时间');
       return;
     } else if (!submitData.content && submitData.attachmentList.length === 0) {
@@ -130,19 +131,23 @@
     spinning.value = true;
     await getHomeworkDetailApi(props.topicDetails.homeworkId)
       .then((res) => {
-        console.log('作业详情:', res);
-        res.attachmentList = res.attachmentList.map((item) => {
+        const stateStr = res.state === 1 ? '草稿' : '作业';
+        console.log(`学生获取${stateStr}详情成功:`, res);
+        res.attachmentList.forEach((item) => {
           item.fileSize = `附件大小：${getFileSize(item.fileSize)}`;
           item.fileSuffix = getFileType(item.fileName);
-          item.isImg = isImg(item.fileUrl);
-          return item;
+          item.isImg = isImg(item.fileName);
         });
         detail = Object.assign(detail, res);
+        //  获取完草稿详情后再更新草稿状态
+        isADraft.value = detail.state === 1;
       })
       .catch((err) => {
         console.log('作业详情:', err);
+      })
+      .finally(() => {
+        spinning.value = false;
       });
-    spinning.value = false;
   };
   onBeforeMount(() => {
     getHomeworkDetail();

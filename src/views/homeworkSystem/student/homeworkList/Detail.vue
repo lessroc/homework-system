@@ -14,27 +14,6 @@
         <TypographyParagraph>内容：{{ detail.content }}</TypographyParagraph>
       </template>
       <Divider>{{ newHomework ? '上传附件' : '附件' }}</Divider>
-      <!--<template v-if="detail.attachmentList.length > 0">
-        <div class="attachmentList" v-for="(item, index) in detail.attachmentList" :key="index">
-          <a class="item" :href="item.fileUrl" target="_blank" rel="noopener noreferrer">
-            <div class="left">
-              <img class="imgStyle" v-if="item.isImg" :src="item.fileUrl" :alt="item.fileName" />
-              <FileExcelOutlined v-else-if="item.fileSuffix === 'excel'" class="icon" />
-              <FileWordOutlined v-else-if="item.fileSuffix === 'word'" class="icon" />
-              <FilePptOutlined v-else-if="item.fileSuffix === 'ppt'" class="icon" />
-              <FilePdfOutlined v-else-if="item.fileSuffix === 'pdf'" class="icon" />
-              <FileZipOutlined v-else-if="item.fileSuffix === 'zip'" class="icon" />
-              <FileTextOutlined v-else-if="item.fileSuffix === 'text'" class="icon" />
-              <FileMarkdownOutlined v-else-if="item.fileSuffix === 'markdown'" class="icon" />
-              <FileUnknownOutlined v-else class="icon" />
-            </div>
-            <div class="right">
-              <div class="fileName">{{ item.fileName }}</div>
-              <div class="fileSize">{{ item.fileSize }}</div>
-            </div>
-          </a>
-        </div>
-      </template>-->
       <UploadFiles
         v-if="detail.attachmentList.length > 0 || newHomework"
         :attachmentList="detail.attachmentList"

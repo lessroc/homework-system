@@ -1,6 +1,6 @@
 <template>
   <Upload v-model:file-list="fileList" name="file" :action="uploadUrl" @change="handleChange">
-    <div class="uploadBtnBox" v-if="newHomework">
+    <div class="uploadBtnBox" v-if="newHomework || isADraft">
       <Button>
         <upload-outlined />
         上传附件

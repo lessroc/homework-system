@@ -24,6 +24,7 @@ const teacherManage: AppRouteModule = {
         title: t('routes.homeworkSystem.teacherManage'),
         hideMenu: true,
       },
+      props: { userType: 2 },
     },
   ],
 };

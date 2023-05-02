@@ -1,5 +1,4 @@
 import { createCourseApi } from '/@/views/homeworkSystem/api/teacher';
-import { CourseListDTO } from '/@/views/homeworkSystem/api/teacher/model';
 
 /**
  * 创建课程方法
@@ -17,22 +16,5 @@ export const createCourseMethod = async (params) => {
         console.log('创建课程错误:', err);
         reject(err);
       });
-  });
-};
-
-/**
- * 替换课程列表中图片的域名
- * https://frp-any.top:32028 -> ''
- */
-export const replaceCoverUrl = (courseList: CourseListDTO[]): CourseListDTO[] => {
-  return courseList.map((course) => {
-    if (course.coverUrl.startsWith('https://frp-any.top:32028')) {
-      return {
-        ...course,
-        coverUrl: course.coverUrl.replace('https://frp-any.top:32028', ''),
-      };
-    } else {
-      return course;
-    }
   });
 };

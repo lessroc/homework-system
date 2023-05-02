@@ -45,21 +45,32 @@ export const isImg = (fileName) => {
   return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(suffix);
 };
 
-// 深度遍历result中的每一项
-// 如果属性类型是字符串则将字符串开头/^http.*\/static\//的部分替换为http://342j6q8933.wicp.vip/static/
-// 如果属性类型是字符串则将字符串开头/static/的部分替换为http://342j6q8933.wicp.vip/static/
+/**
+ * 深度遍历 result 中的每一个字段
+ */
 export const deepTraversal = (obj: any) => {
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const element = obj[key];
       if (typeof element === 'string') {
-        obj[key] = element.replace(/^http.*\/static\//, `${basicUrl}/static/`);
+        obj[key] = replaceUrl(element, basicUrl);
         if (element.startsWith('/static/')) {
-          obj[key] = element.replace('/static/', `${basicUrl}/static/`);
+          obj[key] = basicUrl + element;
         }
       } else if (typeof element === 'object') {
         deepTraversal(element);
       }
     }
   }
+};
+
+/**
+ * 替换 url
+ * - 匹配以 http 开头其后紧接 /static/ 则替换为 {replaceUrl}
+ * - 匹配以 /static/ 开头则替换为 {replaceUrl}
+ * @param url 要替换的 url
+ * @param replaceValue 替换的值
+ */
+export const replaceUrl = (url: string, replaceValue: string) => {
+  return url.replace(/^http.*(?=\/static\/)/, replaceValue);
 };

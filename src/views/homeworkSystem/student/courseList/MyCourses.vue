@@ -20,9 +20,9 @@
   let list = reactive([]);
   let paging = reactive({
     pageNum: 1,
-    pageSize: 20,
-    totalPage: 5,
-    total: 100,
+    pageSize: 10,
+    totalPage: 0,
+    total: 0,
   });
   const getList = async () => {
     spinning.value = true;

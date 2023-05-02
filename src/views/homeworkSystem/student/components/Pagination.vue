@@ -6,6 +6,9 @@
       @change="onChange"
       v-model:current="paging.pageNum"
       @show-size-change="onShowSizeChange"
+      :showSizeChanger="true"
+      :pageSize="paging.pageSize"
+      :showTotal="(total) => `共 ${total} 条`"
     />
   </div>
 </template>

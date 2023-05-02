@@ -4,6 +4,8 @@
 export interface CreateCourseParams {
   courseName: string;
   courseDesc: string;
+  coverUrl: string;
+  courseId?: number;
 }
 
 /**
@@ -72,7 +74,7 @@ export interface CourseListDTO {
   /**
    * 课程封面url
    */
-  coverUrl: string;
+  coverUrl?: string;
   /**
    * 老师id
    */

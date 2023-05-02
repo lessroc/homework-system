@@ -2,7 +2,7 @@
   <Spin :spinning="spinning">
     <div class="cardBox">
       <template v-for="(item, i) in list" :key="i">
-        <CourseCard :cardInfo="item" :isAll="false" />
+        <CourseCard :cardInfo="item" :isAll="false" @refresh="getList" />
       </template>
     </div>
     <Pagination class="paginationComponent" @set-paging="setPaging" :get-paging="paging" />
@@ -33,6 +33,7 @@
     })
       .then((res) => {
         console.log('获取学生课程列表成功:', res);
+        list.length = 0;
         list = Object.assign(list, res.list);
         const { pageNum, pageSize, totalPage, total } = res;
         const newPaging = { pageNum, pageSize, totalPage, total };

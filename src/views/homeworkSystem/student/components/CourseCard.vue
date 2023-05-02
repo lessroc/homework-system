@@ -12,7 +12,7 @@
       <Tooltip color="blue" title="加入课程" @click="joinCourse" v-if="isAll">
         <PlusCircleOutlined />
       </Tooltip>
-      <Tooltip color="volcano" title="退出课程" @click="quitCourse" v-else>
+      <Tooltip color="volcano" title="退出课程" @click.stop="quitCourse" v-else>
         <MinusCircleOutlined />
       </Tooltip>
     </template>
@@ -25,6 +25,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useGo } from '/@/hooks/web/usePage';
   const go = useGo();
+  const emits = defineEmits(['refresh']);
 
   /**
    * 打开课程作业列表页
@@ -59,8 +60,8 @@
       .then((res) => {
         console.log('退出课程成功:', res);
         message.success('退出课程成功');
-        // 刷新页面
-        window.location.reload();
+        // 通知父组件刷新列表
+        emits('refresh');
       })
       .catch((err) => {
         console.log('退出课程失败:', err);

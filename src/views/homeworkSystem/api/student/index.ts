@@ -55,7 +55,7 @@ export function joinCourseApi(params: { courseId: number; studentId: number }) {
       params,
     },
     {
-      errorMessageMode: 'modal',
+      errorMessageMode: 'message',
     },
   );
 }
@@ -70,7 +70,7 @@ export function leaveCourseApi(params: { courseId: number; studentId: number }) 
       params,
     },
     {
-      errorMessageMode: 'modal',
+      errorMessageMode: 'message',
     },
   );
 }

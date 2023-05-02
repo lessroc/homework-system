@@ -48,7 +48,6 @@
       })
       .catch((err) => {
         console.log('加入课程失败:', err);
-        message.error('加入课程失败');
       });
   };
   const quitCourse = async () => {
@@ -65,7 +64,6 @@
       })
       .catch((err) => {
         console.log('退出课程失败:', err);
-        message.error('退出课程失败');
       });
   };
 </script>

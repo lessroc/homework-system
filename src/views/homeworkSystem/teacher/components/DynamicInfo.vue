@@ -110,11 +110,14 @@
     beforeUploadImg,
     customUploadFile,
   } from '/@/views/homeworkSystem/utils/customUploadFile';
-  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-  import { GetCourseListResultParams } from '/@/views/homeworkSystem/api/teacher/model';
+  import {
+    CreateCourseParams,
+    GetCourseListResultParams,
+  } from '/@/views/homeworkSystem/api/teacher/model';
   import { createCourseMethod } from '/@/views/homeworkSystem/utils/teacherMethods';
   import { useGo } from '/@/hooks/web/usePage';
   import { useUserStore } from '/@/store/modules/user';
+  import { replaceUrl } from '/@/views/homeworkSystem/utils';
   const userStore = useUserStore();
   const go = useGo();
 
@@ -250,13 +253,8 @@
   // const defaultCoverUrl = 'http://342j6q8933.wicp.vip/static/1681150460000最伟大的作品-周杰伦.jpg'; // 默认封面, 暂无法上传图片
 
   // 表单
-  interface FormState {
-    courseName: string;
-    courseDesc: string;
-    coverUrl: string;
-  }
   const formRef = ref();
-  let formState = reactive<FormState>({
+  let formState = reactive<CreateCourseParams>({
     courseName: '',
     courseDesc: '',
     coverUrl: '',
@@ -273,6 +271,12 @@
     formRef.value
       .validate()
       .then(async () => {
+        if (isEditCourse) {
+          // 编辑课程时添加课程Id
+          formState.courseId = currEditCourseBackup.courseId;
+          // coverUrl去除域名
+          formState.coverUrl = replaceUrl(formState.coverUrl, '');
+        }
         console.log('values', formState, toRaw(formState));
         // 如果是编辑课程则调用编辑课程接口
         const result = isEditCourse
@@ -309,8 +313,8 @@
           showCCMB.value = false;
         }
       })
-      .catch((error: ValidateErrorEntity<FormState>) => {
-        console.log('error', error);
+      .catch((error) => {
+        console.log('提交异常:', error);
       });
   };
   const resetForm = () => {

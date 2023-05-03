@@ -68,7 +68,7 @@
   let detail = reactive({
     attachmentList: [],
     homeworkId: props.topicDetails.homeworkId,
-    homeworkTopicDesc: '',
+    homeworkTopicDesc: props.topicDetails.homeworkTopicDesc,
     homeworkTopicId: props.topicDetails.homeworkTopicId,
     homeworkTopicTitle: props.topicDetails.homeworkTopicTitle,
     content: '',

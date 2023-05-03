@@ -46,6 +46,7 @@
   import { Table, Input, TypographyLink, Popconfirm, message } from 'ant-design-vue';
   import { deleteUserApi, getUserListApi } from '/@/views/homeworkSystem/api/admin';
   import dayjs from 'dayjs';
+  import { editUserNameHomeworkApi } from '/@/views/homeworkSystem/api/sys/user';
   const loading = ref<boolean>(false);
   const props = defineProps({
     userType: {
@@ -164,6 +165,7 @@
     updateTime: string;
     password: string;
     userName: string;
+    userType: number;
   }
 
   const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
@@ -173,7 +175,23 @@
   };
   const save = (id: number) => {
     Object.assign(userList.list.filter((item) => id === item.id)[0], editableData[id]);
-    delete editableData[id];
+    console.log('保存用户信息:', editableData[id]);
+    editUserNameHomeworkApi({
+      userId: editableData[id].id,
+      userName: editableData[id].userName,
+      password: editableData[id].password,
+      userType: editableData[id].userType,
+    })
+      .then((res) => {
+        console.log('修改用户信息成功:', res);
+        message.success('修改用户信息成功');
+        getUserList();
+        delete editableData[id];
+      })
+      .catch((err) => {
+        console.log('修改用户信息失败:', err);
+        message.error('修改用户信息失败');
+      });
   };
   const cancel = (id: number) => {
     delete editableData[id];

@@ -271,6 +271,7 @@
     formRef.value
       .validate()
       .then(async () => {
+        const coverUrlBackup = formState.coverUrl;
         if (isEditCourse) {
           // 编辑课程时添加课程Id
           formState.courseId = currEditCourseBackup.courseId;
@@ -286,13 +287,13 @@
           // 如果是编辑课程则更新课程列表
           if (isEditCourse) {
             // 更新课程列表
-            const { courseName, courseDesc, coverUrl } = formState;
+            const { courseName, courseDesc } = formState;
             const { courseId, teacherId, teacherName } = currEditCourseBackup;
             teacherCourseList.list[currEditCourseIndex] = {
               courseId,
               courseName,
               courseDesc,
-              coverUrl,
+              coverUrl: coverUrlBackup,
               teacherId,
               teacherName,
             };

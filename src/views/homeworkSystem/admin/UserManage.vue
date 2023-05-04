@@ -95,6 +95,10 @@
           item.updateTime = item.updateTime && dayjs(item.updateTime).format('YYYY-MM-DD HH:mm:ss');
         });
         userList = Object.assign(userList, res);
+        // 设置分页
+        paginationProps.current = userList.pageNum;
+        paginationProps.pageSize = userList.pageSize;
+        paginationProps.total = userList.total;
       })
       .finally(() => {
         loading.value = false;

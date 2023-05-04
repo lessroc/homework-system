@@ -217,10 +217,11 @@
     })
       .then((res) => {
         console.log('获取所有课程列表成功:', res);
-        paginationProps.current = res.pageNum;
-        paginationProps.pageSize = res.pageSize;
-        paginationProps.total = res.total;
         allCoursesList = Object.assign(allCoursesList, res);
+        // 设置分页
+        paginationProps.current = allCoursesList.pageNum;
+        paginationProps.pageSize = allCoursesList.pageSize;
+        paginationProps.total = allCoursesList.total;
       })
       .catch((err) => {
         console.log('获取所有课程列表失败:', err);

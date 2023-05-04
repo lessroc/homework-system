@@ -30,7 +30,7 @@
         <RadioGroup v-model:value="formData.userType">
           <Radio :value="1">{{ t('sys.login.student') }}</Radio>
           <Radio :value="2">{{ t('sys.login.teacher') }}</Radio>
-          <Radio :value="3">{{ t('sys.login.admin') }}</Radio>
+          <!--<Radio :value="3">{{ t('sys.login.admin') }}</Radio>-->
         </RadioGroup>
       </FormItem>
 

@@ -71,6 +71,7 @@
     })
       .then((res) => {
         console.log('获取所有课程列表成功:', res);
+        list.length = 0;
         list = Object.assign(list, res.list);
         const { pageNum, pageSize, totalPage, total } = res;
         const newPaging = { pageNum, pageSize, totalPage, total };

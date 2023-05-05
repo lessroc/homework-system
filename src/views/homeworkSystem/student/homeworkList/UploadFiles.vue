@@ -1,5 +1,11 @@
 <template>
-  <Upload v-model:file-list="fileList" name="file" :action="uploadUrl" @change="handleChange">
+  <Upload
+    v-model:file-list="fileList"
+    name="file"
+    :action="uploadUrl"
+    @change="handleChange"
+    @remove="removeFile"
+  >
     <div class="uploadBtnBox" v-if="newHomework || isADraft">
       <Button>
         <upload-outlined />
@@ -56,6 +62,7 @@
   console.log('旧的上传文件:', props.attachmentList);
   console.log('是否可以删除:', props.newHomework);
   const oldFileList = reactive(initializeFileList(props.attachmentList));
+  let fileList = ref(oldFileList);
   function initializeFileList(oldFileList) {
     return oldFileList.map((item, i) => {
       return {
@@ -68,6 +75,12 @@
       };
     });
   }
+  const removeFile = (file) => {
+    console.log('removeFile', file);
+    const index = fileList.value.findIndex((item) => item.uid === file.uid);
+    fileList.value.splice(index, 1);
+    emit('updateFileList', fileList.value);
+  };
   // 监听props
   const handleChange = (info: UploadChangeParam) => {
     if (info.file.status !== 'uploading') {
@@ -113,8 +126,6 @@
     }
     return '';
   }
-
-  let fileList = ref(oldFileList);
 </script>
 <style lang="less" scoped>
   :deep(.ant-upload) {

@@ -12,7 +12,7 @@
     <FormItem name="desc" label="描述" v-bind="desc">
       <Textarea v-model:value="formState.desc" />
     </FormItem>
-    <FormItem name="rangeTimePicker" label="开始时间和结束时间" v-bind="rangeConfig">
+    <FormItem name="rangeTimePicker" label="开始时间和结束时间" v-bind="rangeTimePicker">
       <RangePicker
         v-model:value="formState.rangeTimePicker"
         :ranges="ranges"
@@ -74,7 +74,7 @@
   const desc = {
     rules: [{ type: 'string' as const, required: true, message: '请输入作业描述！' }],
   };
-  const rangeConfig = {
+  const rangeTimePicker = {
     rules: [{ type: 'array' as const, required: true, message: '请选择作业时间！' }],
   };
   const formState = reactive({} as FormState);

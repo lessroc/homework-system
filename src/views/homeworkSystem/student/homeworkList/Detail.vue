@@ -102,7 +102,7 @@
     // 处理附件list
     submitData.attachmentList = submitData.attachmentList.map((item) => {
       return {
-        fileName: item.fileName || item.fileName,
+        fileName: item.fileName,
         fileSize: item.size || item.fileSize,
         fileUrl: item.staticUrl || item.fileName,
       };
@@ -134,6 +134,7 @@
         const stateStr = res.state === 1 ? '草稿' : '作业';
         console.log(`学生获取${stateStr}详情成功:`, res);
         res.attachmentList.forEach((item) => {
+          item.size = item.fileSize;
           item.fileSize = `附件大小：${getFileSize(item.fileSize)}`;
           item.fileSuffix = getFileType(item.fileName);
           item.isImg = isImg(item.fileName);

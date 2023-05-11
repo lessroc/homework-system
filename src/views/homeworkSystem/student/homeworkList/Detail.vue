@@ -102,9 +102,9 @@
     // 处理附件list
     submitData.attachmentList = submitData.attachmentList.map((item) => {
       return {
-        fileName: item.fileName,
-        fileSize: item.size,
-        fileUrl: item.staticUrl,
+        fileName: item.fileName || item.fileName,
+        fileSize: item.size || item.fileSize,
+        fileUrl: item.staticUrl || item.fileName,
       };
     });
     const fn = state === 1 ? saveDraftHomeworkApi : commitHomeworkApi;

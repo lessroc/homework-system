@@ -2,12 +2,12 @@
 
 [![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
 
-<h1>Vue vben admin</h1>
+<h1>作业管理系统</h1>
 </div>
 
 ## 简介
 
-精简 Vue Vben Admin。
+使用 VbenAdmin 精简分支 thin 搭建的作业管理系统
 
 ## 特性
 

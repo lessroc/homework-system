@@ -25,6 +25,12 @@
       />
     </FormItem>
 
+    <FormItem style="color: #999">
+      <div>学生账号密码：李同学，123456</div>
+      <div>老师账号密码：黄老师，123456</div>
+      <div>管理员账号密码：admin，123456</div>
+    </FormItem>
+
     <FormItem class="enter-x">
       <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
@@ -69,8 +75,8 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
-    password: '',
+    account: '黄老师',
+    password: '123456',
   });
 
   const { validForm } = useFormValid(formRef);
